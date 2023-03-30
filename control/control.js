@@ -1,3 +1,4 @@
+const dayjs = require("dayjs");
 const fs = require("fs");
 const formidable = require("formidable");
 
@@ -6,9 +7,9 @@ const {
     systemPassword,
     uploadDir,
     logLoginPath
-} = require("../config/config.js")
+} = require("../config/config.js");
 
-let logLoginWriteStream = fs.createWriteStream(logLoginPath, { flags: "a" })
+let logLoginWriteStream = fs.createWriteStream(logLoginPath, { flags: "a" });
 
 function getIPAddress(req) {
     let ip = req.headers["x-real-ip"] ||
@@ -55,7 +56,7 @@ module.exports = {
     },
     verifyUserInfo: (req, res) => {
         let clientIPAddress = getIPAddress(req);
-        console.log("登录地址：" + clientIPAddress);
+        console.log("登录地址：", clientIPAddress);
         logLoginWriteStream.write("登录地址：" + clientIPAddress + "\n");
 
         let verifyStr = "";
@@ -67,7 +68,8 @@ module.exports = {
             try {
                 verifyObj = JSON.parse(verifyStr);
                 console.log("验证数据：", verifyObj);
-                logLoginWriteStream.write("验证数据：" + verifyObj + "\n");
+                logLoginWriteStream.write("验证数据：" +
+                                          JSON.stringify(verifyObj) + "\n");
             }
             catch (e) {
                 console.log(e);
@@ -77,53 +79,58 @@ module.exports = {
                 "Content-Type": "text/plain;charset=UTF-8"
             });
 
-            const loginDate = new Date().toLocaleString();
-            console.log("登录时间：" + loginDate + "\n");
+            const loginDate = dayjs().format("YYYY-MM-DD HH:mm:ss");
+            console.log("登录时间：", loginDate);
             logLoginWriteStream.write("登录时间：" + loginDate + "\n");
 
-            console.log("用户账号：" + verifyObj.user);
+            console.log("用户账号：", verifyObj.user);
             logLoginWriteStream.write("用户账号：" + verifyObj.user + "\n");
 
             if (verifyObj.user === systemUser &&
                 verifyObj.password === systemPassword) {
                 console.log("验证成功");
-                logLoginWriteStream.write("验证成功\n");
+                logLoginWriteStream.write("验证成功\n\n");
 
                 // 设置Cookie过期时间为2小时
                 res.writeHead(200, {
                     "Set-Cookie": verifyObj.user + "=" +
-                                    verifyObj.password + ";" +
-                                    "path=/;expires=" +
-                                    new Date(Date.now() + 1000 * 60 * 60 * 2).toGMTString()
+                                  verifyObj.password + ";" +
+                                 "path=/;expires=" +
+                                  new Date(Date.now() + 1000 * 60 * 60 * 2).toGMTString()
                 });
                 res.end(JSON.stringify({ code: 0, msg: "验证成功" }));
             }
             else {
-                console.log("验证失败");
+                console.log("用户密码：", verifyObj.password)
                 logLoginWriteStream.write("用户密码：" + verifyObj.password + "\n");
-                logLoginWriteStream.write("验证失败\n");
+
+                console.log("验证失败\n");
+                logLoginWriteStream.write("验证失败\n\n");
 
                 res.end(JSON.stringify({ code: 1, msg: "验证失败" }));
             }
         });
     },
     getFileInfo: (req, res) => {
+        console.log("\n获取文件");
+
         fs.readdir(uploadDir, (err, data) => {
             let ret = [];
             for (let file of data) {
                 let fileStat = fs.statSync(uploadDir + file);
+                console.log("文件名称：", file);
                 console.log("文件信息：", fileStat);
                 ret.push({
                     src: file,
                     size: fileStat.size,
                     mtimeMs: new Date(fileStat.mtime).getTime()
-                })
+                });
             }
             res.end(JSON.stringify(ret));
         });
     },
     uploadFile: (req, res) => {
-        console.log("上传文件");
+        console.log("\n上传文件");
 
         var form = new formidable.IncomingForm();
         form.uploadDir = uploadDir;          // 设置文件上传目录
@@ -132,25 +139,21 @@ module.exports = {
         form.maxFileSize = 10 * 1024 * 1024; // 设置文件大小为10MB
 
         form.on("error", (err) => {
-            console.log("上传失败，文件大小超过10MB：", err);
+            console.log("上传失败，文件大小超过10MB");
             res.writeHead(400, { "content-type": "text/html;charset=UTF-8" });
             res.end("上传失败，文件大小超过10MB");
         });
 
         form.parse(req, (err, fields, files) => {
             if (err) {
-                console.log("上传失败：", err);
+                console.log("上传失败，表单解析错误");
                 res.writeHead(500, { "content-type": "text/html;charset=UTF-8" });
-                res.end("上传失败：" + JSON.stringify(err));
+                res.end("上传失败，表单解析错误");
                 return;
             }
 
-            if (!files.uploadFile) {
-                res.end("上传失败，文件【name】属性必须为【uploadFile】");
-                return
-            };
-
-            if (Object.prototype.toString.call(files.uploadFile) === "[object Object]") {
+            if (Object.prototype.toString.call(files.uploadFile) ===
+              "[object Object]") {
                 files.uploadFile = [files.uploadFile];
             }
 
@@ -173,16 +176,20 @@ module.exports = {
 
                 fs.rename(fileOldPath, fileNewPath, function(err) {
                     if (err) {
-                        console.log("上传失败：", err);
-                        errMsg += JSON.stringify(err) + "\n";
+                        errMsg = "上传失败";
+                        console.log("上传失败，文件重命名异常");
                     }
                 });
             }
 
+            if (errMsg !== "") {
+                errMsg = "上传失败，文件重命名异常";
+            }
             res.end(errMsg);
         });
     },
     deleteFile: (req, res) => {
+        console.log("\n删除文件");
         let url = decodeURI(req.url);
         let fileName = url.slice(url.indexOf("?") + 1);
         console.log("删除文件: ", fileName)
