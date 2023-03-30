@@ -1,0 +1,10 @@
+{
+    "name": "ysyx-oj-system",
+    "version": "1.0.0",
+    "scripts": {
+        "serve": "node ./app.js"
+    },
+    "devDependencies": {
+        "formidable": "^1.2.1"
+    }
+}
