@@ -2,8 +2,6 @@ const fs = require("fs");
 const http = require("http");
 const path = require("path");
 
-
-
 const {
     port,
     uploadDir,
@@ -17,7 +15,7 @@ const {
     getFileInfo,
     uploadFile,
     deleteFile
-} = require("./control/control");
+} = require("./control/control.js");
 
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir)
@@ -43,7 +41,6 @@ function handlePage404(res, fileDir) {
 }
 
 var server = http.createServer(function(req, res) {
-
     let url = decodeURI(req.url);
     console.log("接口地址：", url);
 
@@ -76,13 +73,13 @@ var server = http.createServer(function(req, res) {
         sendPage(res, "./index.html");
     }
     else if (url === "/getFileInfo" && method === "get") {
-        getFileInfo(req, res)
+        getFileInfo(req, res);
     }
     else if (url === "/uploadFile" && method === "post") {
-        uploadFile(req, res)
+        uploadFile(req, res);
     }
     else if (/^\/deleteFile?/.test(url) && method === "get") {
-        deleteFile(req, res)
+        deleteFile(req, res);
     }
     else {
         // 下载文件
