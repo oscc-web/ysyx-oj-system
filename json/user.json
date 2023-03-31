@@ -1,0 +1,14 @@
+[
+    {
+        "id": "eac9f317-f328-84b6-265c-df594c7a241d",
+        "userName": "管理员",
+        "userAccount": "root",
+        "userPassword": "root"
+    },
+    {
+        "id": "d57cb844-b2f3-885c-e9d5-9bdf37444f88",
+        "userName": "张三",
+        "userAccount": "zhangsan",
+        "userPassword": "123456"
+    }
+]
