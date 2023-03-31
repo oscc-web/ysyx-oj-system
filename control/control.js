@@ -1,12 +1,16 @@
 const dayjs = require("dayjs");
 const fs = require("fs");
+const path = require("path");
 const formidable = require("formidable");
+
+const json = require("../models/json.js");
 
 const {
     systemUser,
     systemPassword,
     uploadDir,
-    logLoginPath
+    logLoginPath,
+    rootDir
 } = require("../config/config.js");
 
 let logLoginWriteStream = fs.createWriteStream(logLoginPath, { flags: "a" });
@@ -60,8 +64,8 @@ module.exports = {
         logLoginWriteStream.write("登录地址：" + clientIPAddress + "\n");
 
         let verifyStr = "";
-        req.on("data", (verifyData) => {
-            verifyStr += verifyData;
+        req.on("data", (data) => {
+            verifyStr += data;
         });
         req.on("end", () => {
             let verifyObj = {};
@@ -83,31 +87,36 @@ module.exports = {
             console.log("登录时间：", loginDate);
             logLoginWriteStream.write("登录时间：" + loginDate + "\n");
 
-            console.log("用户账号：", verifyObj.user);
-            logLoginWriteStream.write("用户账号：" + verifyObj.user + "\n");
+            console.log("用户账号：", verifyObj.userAccount);
+            logLoginWriteStream.write("用户账号：" + verifyObj.userAccount + "\n");
 
-            if (verifyObj.user === systemUser &&
-                verifyObj.password === systemPassword) {
+            const jsonData = json.getJSONDataByField(
+                path.join(rootDir, "json/user.json"),
+                "equal",
+                "userAccount",
+                verifyObj.userAccount);
+            console.log(jsonData);
+            if (jsonData.length === 1) {
                 console.log("验证成功");
                 logLoginWriteStream.write("验证成功\n\n");
 
                 // 设置Cookie过期时间为2小时
                 res.writeHead(200, {
-                    "Set-Cookie": verifyObj.user + "=" +
-                                  verifyObj.password + ";" +
+                    "Set-Cookie": verifyObj.userAccount + "=" +
+                                  verifyObj.userPassword + ";" +
                                  "path=/;expires=" +
                                   new Date(Date.now() + 1000 * 60 * 60 * 2).toGMTString()
                 });
-                res.end(JSON.stringify({ code: 0, msg: "验证成功" }));
+                res.end("success");
             }
             else {
-                console.log("用户密码：", verifyObj.password)
-                logLoginWriteStream.write("用户密码：" + verifyObj.password + "\n");
+                console.log("用户密码：", verifyObj.userPassword)
+                logLoginWriteStream.write("用户密码：" + verifyObj.userPassword + "\n");
 
                 console.log("验证失败\n");
                 logLoginWriteStream.write("验证失败\n\n");
 
-                res.end(JSON.stringify({ code: 1, msg: "验证失败" }));
+                res.end("error");
             }
         });
     },
@@ -202,5 +211,6 @@ module.exports = {
             }
             res.end();
         });
-    }
+    },
+
 }

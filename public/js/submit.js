@@ -39,7 +39,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
                 sort: false,
                 align: "center"
             }, {
-                field: "problemDifficulty",
+                field: "problemDiff",
                 title: "题目难度",
                 width: 150,
                 sort: false,
@@ -87,7 +87,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
             data: [{
                 problemNo: "004",
                 problemName: "RV32M单周期处理器",
-                problemDifficulty: "专家",
+                problemDiff: "专家",
                 problemLang: "Chisel",
                 problemTag: "体系结构",
                 submitStatus: "未通过",
@@ -96,7 +96,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
             }, {
                 problemNo: "003",
                 problemName: "ALU运算单元",
-                problemDifficulty: "困难",
+                problemDiff: "困难",
                 problemLang: "Verilog",
                 problemTag: "数字电路",
                 submitStatus: "未通过",
@@ -105,7 +105,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
             }, {
                 problemNo: "002",
                 problemName: "快速排序",
-                problemDifficulty: "中等",
+                problemDiff: "中等",
                 problemLang: "C",
                 problemTag: "程序设计",
                 submitStatus: "未通过",
@@ -114,7 +114,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
             }, {
                 problemNo: "001",
                 problemName: "Hello World",
-                problemDifficulty: "简单",
+                problemDiff: "简单",
                 problemLang: "C",
                 problemTag: "程序设计",
                 submitStatus: "已通过",
@@ -123,7 +123,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
             }, {
                 problemNo: "001",
                 problemName: "Hello World",
-                problemDifficulty: "简单",
+                problemDiff: "简单",
                 problemLang: "C",
                 problemTag: "程序设计",
                 submitStatus: "未通过",
@@ -135,14 +135,14 @@ layui.use(["admin", "form", "layer", "table"], function() {
                     "div[lay-id='submitTable'] .layui-table-main ";
                 for (var i = 0; i < res.data.length; i++) {
                     var data = res.data[i];
-                    var problemDifficulty = data.problemDifficulty;
+                    var problemDiff = data.problemDiff;
                     var selectorContent = selectorPrefix +
                         "tr[data-index=" + i + "] " +
-                        "td[data-field='problemDifficulty'] .layui-table-cell";
+                        "td[data-field='problemDiff'] .layui-table-cell";
                     $(selectorContent).html(
                         '<span class="layui-badge ' +
-                            problemDifficultyObj[problemDifficulty] + '">' +
-                            problemDifficulty +
+                            problemDifficultyObj[problemDiff] + '">' +
+                            problemDiff +
                         '</span>');
 
                     var submitStatus = data.submitStatus;

@@ -4,6 +4,7 @@ const path = require("path");
 
 const {
     port,
+    rootDir,
     uploadDir,
     logDir,
     logLoginPath,
@@ -17,6 +18,19 @@ const {
     deleteFile
 } = require("./control/control.js");
 
+const contentTypeObj = {
+    "json": "application/json",
+    "pdf":  "application/pdf",
+    "woff": "font/woff",
+    "css":  "text/css",
+    "html": "text/html;charset=utf-8",
+    "js":   "text/javascript",
+    "txt":  "text/plain",
+    "gif":  "image/gif",
+    "jpg":  "image/jpg",
+    "png":  "image/png"
+}
+
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir)
 }
@@ -26,13 +40,18 @@ if (!fs.existsSync(logLoginPath)) {
 }
 
 function sendPage(res, path, statusCode = 200) {
-    res.writeHead(statusCode, { "Content-Type": "text/html;charset=UTF-8" });
-    fs.createReadStream(path).pipe(res);
+    const suffix = path.substring(path.lastIndexOf(".") + 1);
+    if (contentTypeObj[suffix] !== undefined) {
+        res.writeHead(statusCode, {
+            "content-Type": contentTypeObj[suffix]
+        });
+        fs.createReadStream(path).pipe(res);
+    }
 }
 
 function handlePage404(res, fileDir) {
     if (!fs.existsSync(fileDir)) {
-        res.writeHead(404, { "content-type": "text/html;charset=UTF-8" });
+        res.writeHead(404, { "content-type": "text/html;charset=utf-8" });
         res.end("没有文件或目录");
         console.log("没有文件或目录：", fileDir);
         return true;
@@ -42,15 +61,15 @@ function handlePage404(res, fileDir) {
 
 var server = http.createServer(function(req, res) {
     let url = decodeURI(req.url);
-    console.log("接口地址：", url);
-
     let method = req.method.toLowerCase()
+    console.log("接口地址：", url);
 
     let parameterPosition = url.indexOf("?");
     if (parameterPosition > -1) {
         url = url.slice(0, parameterPosition);
         console.log("接口地址（去掉参数）: ", url);
     }
+    console.log("接口方法：", method);
 
     if (/^\/public\//.test(url)) {
         let fileDir = "." + url;
@@ -60,18 +79,26 @@ var server = http.createServer(function(req, res) {
         return;
     }
 
+    // if (url === "/verifyUserInfo" && method === "post") {
+    //     verifyUserInfo(req, res)
+    //     return;
+    // }
+    // if (!verifyCookie(req.headers.cookie)) {
+    //     sendPage(res, "./public/verify.html", 400);
+    //     return;
+    // }
+
+    if (url === "/" && method === "get") {
+        sendPage(res, "./public/index.html");
+    }
     if (url === "/verifyUserInfo" && method === "post") {
         verifyUserInfo(req, res)
         return;
     }
-    if (!verifyCookie(req.headers.cookie)) {
-        sendPage(res, "./public/verify.html", 400);
-        return;
-    }
 
-    if (url === "/" && method === "get") {
-        sendPage(res, "./index.html");
-    }
+
+
+
     else if (url === "/getFileInfo" && method === "get") {
         getFileInfo(req, res);
     }
@@ -82,12 +109,13 @@ var server = http.createServer(function(req, res) {
         deleteFile(req, res);
     }
     else {
+        sendPage(res, path.join(rootDir, url));
         // 下载文件
-        let fileDir = path.join(uploadDir, url);
-        if (!handlePage404(res, fileDir)) {
-            console.log("下载文件: ", fileDir);
-            fs.createReadStream(fileDir).pipe(res)
-        }
+        // let fileDir = path.join(uploadDir, url);
+        // if (!handlePage404(res, fileDir)) {
+        //     console.log("下载文件: ", fileDir);
+        //     fs.createReadStream(fileDir).pipe(res)
+        // }
     }
 });
 server.listen(port);
