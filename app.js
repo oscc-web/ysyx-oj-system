@@ -7,7 +7,7 @@ const {
     uploadDir,
     logDir,
     logLoginPath,
-} = require("./config/config.js")
+} = require("./config/config.js");
 
 const {
     verifyCookie,
