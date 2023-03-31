@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>数据表格</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../../assets/css/admin.css" media="all"/>
+</head>
+
+<body>
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">数据表格</span>
+    <span class="layui-breadcrumb pull-right">
+        <a href="../../console/console.html">首页</a>
+        <a><cite>数据表格</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">搜索：</label>
+                        <div class="layui-input-inline mr0">
+                            <input id="edtSearch" class="layui-input" type="text" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn icon-btn" id="btnSearch">
+                            <i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                        <button id="btnExport" class="layui-btn icon-btn">
+                            <i class="layui-icon">&#xe67d;</i>导出
+                        </button>
+                        <!-- 下拉按钮 -->
+                        <ul class="layui-nav nav-btn" style="margin-left: 10px;">
+                            <li class="layui-nav-item" lay-unselect>
+                                <a>&nbsp;更多&nbsp;</a>
+                                <dl class="layui-nav-child layui-anim-fadein align-right">
+                                    <dd lay-unselect><a><i class="layui-icon layui-icon-edit"></i> 修改用户 </a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a><i class="layui-icon layui-icon-delete"></i> 删除用户 </a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a><i class="layui-icon layui-icon-print"></i> 打印用户 </a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-table" id="user-table" lay-filter="user-table"></table>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- 表格操作列 -->
+<script type="text/html" id="user-table-bar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" data-dropdown="#dropdown-{{d.userId}}" data-anchor="top-right">
+        更多<i class="layui-icon layui-icon-triangle-d" style="font-size: 12px !important;"></i>
+    </a>
+    <!-- 下拉菜单 -->
+    <div class="dropdown-menu fixed" id="dropdown-{{d.userId}}">
+        <ul>
+            <li><a lay-event="edit2"><i class="layui-icon layui-icon-edit"></i> 修改</a></li>
+            <li><a lay-event="del2"><i class="layui-icon layui-icon-delete"></i> 删除</a></li>
+            <li><a lay-event="print2"><i class="layui-icon layui-icon-print"></i> 打印</a></li>
+        </ul>
+    </div>
+</script>
+
+<!-- 表格状态列 -->
+<script type="text/html" id="user-tpl-state">
+    <input type="checkbox" lay-skin="switch" lay-text="正常|锁定" checked/>
+</script>
+
+<!-- js部分 -->
+<script type="text/javascript" src="../../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../../assets/js/common.js"></script>
+
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'element', 'dropdown'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var element = layui.element;
+        var dropdown = layui.dropdown;
+
+        // 渲染表格
+        var ins1 = table.render({
+            elem: '#user-table',
+            url: '../../../json/user.json',
+            page: true,
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'username', align: 'center', sort: true, title: '账号'},
+                {field: 'nickName', align: 'center', sort: true, title: '用户名'},
+                {field: 'phone', align: 'center', sort: true, title: '手机号'},
+                {field: 'sex', align: 'center', sort: true, title: '性别'},
+                {
+                    sort: true, align: 'center', templet: function (d) {
+                        return util.toDateString(d.createTime);
+                    }, title: '创建时间'
+                },
+                {field: 'state', align: 'center', sort: true, templet: '#user-tpl-state', title: '状态'},
+                {align: 'center', align: 'center', toolbar: '#user-table-bar', title: '操作', minWidth: 180}
+            ]]
+        });
+
+        //监听工具条
+        table.on('tool(user-table)', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+
+            if (layEvent === 'edit') { // 查看
+                layer.msg('点击了修改');
+            } else if (layEvent === 'del') { // 删除
+                layer.msg('点击了删除');
+            } else if (layEvent === 'edit2') { // 修改2
+                layer.msg('点击了下拉菜单修改');
+            } else if (layEvent === 'del2') { // 删除2
+                layer.msg('点击了下拉菜单删除');
+            } else if (layEvent === 'print2') { // 打印2
+                layer.msg('点击了下拉菜单打印');
+            }
+        });
+
+        // 导出excel
+        $('#btnExport').click(function () {
+            var checkRows = table.checkStatus('user-table');
+            if (checkRows.data.length == 0) {
+                layer.msg('请选择要导出的数据', {icon: 2});
+            } else {
+                table.exportFile(ins1.config.id, checkRows.data, 'xls');
+            }
+        });
+
+        // 搜索按钮点击事件
+        $('#btnSearch').click(function () {
+            var value = $('#edtSearch').val();
+            table.reload('user-table', {where: {search: value}});
+        });
+
+    });
+</script>
+</body>
+
+</html>

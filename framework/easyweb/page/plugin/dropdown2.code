@@ -1,0 +1,59 @@
+<!-- 正常下拉按钮 -->
+<ul class="layui-nav nav-btn">
+    <li class="layui-nav-item" lay-unselect>
+        <a>下拉按钮</a>
+        <dl class="layui-nav-child layui-anim-fadein">
+            <dd lay-unselect><a>修改用户</a></dd>
+            <hr>
+            <dd lay-unselect><a>删除用户</a></dd>
+        </dl>
+    </li>
+</ul>
+//
+// 下拉菜单依赖于element模块
+layui.use(['element'], function () {
+    var element = layui.element;
+
+    element.render('nav');  // 如果html是动态生成的，使用render重新渲染
+});
+//
+<!-- 大型下拉按钮，通过nav-btn-lg样式设置，还有nav-btn-sm，nav-btn-xs等尺寸 -->
+<ul class="layui-nav nav-btn nav-btn-lg">
+    <li class="layui-nav-item" lay-unselect>
+        <a>下拉按钮</a>
+        <dl class="layui-nav-child layui-anim-fadein">
+            <dd lay-unselect><a>修改用户</a></dd>
+        </dl>
+    </li>
+</ul>
+//
+<!-- 下拉按钮组 -->
+<div class="btn-item">
+    <ul class="layui-nav nav-btn">
+        <li class="layui-nav-item text-center" lay-unselect><a>普通按钮</a></li>
+        <li class="layui-nav-item layui-bg-blue" lay-unselect>
+            <a>下拉按钮</a>
+            <dl class="layui-nav-child layui-anim-fadein">
+                <dd lay-unselect><a>修改用户</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+//
+<!-- 下拉菜单位置，通过align-top、align-left、align-right指定位置 -->
+<div class="btn-item" style="margin-bottom: 30px;">
+    <ul class="layui-nav nav-btn">
+        <li class="layui-nav-item layui-bg-blue" lay-unselect>
+            <a>上右弹出</a>
+            <dl class="layui-nav-child layui-anim-fadein align-top">
+                <dd lay-unselect><a>&emsp;修改用户&emsp;</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item layui-bg-orange" lay-unselect>
+            <a>下右弹出</a>
+            <dl class="layui-nav-child layui-anim-fadein align-right">
+                <dd lay-unselect><a>&emsp;修改用户&emsp;</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>

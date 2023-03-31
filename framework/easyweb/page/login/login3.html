@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>登录</title>
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css"/>
+    <style>
+        html, body {
+            background: #EEEEEE;
+        }
+
+        /** 登录界面样式 */
+        .login-logo {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .login-logo img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .login-logo cite {
+            font-style: normal;
+            font-weight: bold;
+            color: #666;
+            padding-left: 10px;
+            font-size: 28px;
+            vertical-align: middle;
+        }
+
+        .login-form {
+            width: 255px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 10px;
+            padding: 40px 50px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+        }
+
+        .login-form .title {
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+            padding-bottom: 15px;
+        }
+
+        /** //登录界面样式结束 */
+    </style>
+</head>
+
+<body>
+<div class="login-logo">
+    <img src="../../assets/images/logo.png">
+    <cite>EasyWeb</cite>
+</div>
+<div class="login-form">
+    <div class="title">用户登录</div>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <input name="username" type="text" class="layui-input" placeholder="账号" lay-verify="required" required/>
+        </div>
+        <div class="layui-form-item">
+            <input name="password" type="password" class="layui-input" placeholder="密码" lay-verify="required" required/>
+        </div>
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-filter="loginSubmit" lay-submit>&emsp;登录&emsp;</button>
+            <button type="reset" class="layui-btn layui-btn-primary">&emsp;重置&emsp;</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script>
+    layui.use(['jquery', 'layer', 'form'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+
+        // 监听表单提交
+        form.on('submit(loginSubmit)', function (data) {
+            layer.msg(data.field);
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

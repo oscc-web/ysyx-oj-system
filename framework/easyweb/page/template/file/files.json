@@ -1,0 +1,138 @@
+{
+  "msg": "查询成功",
+  "code": 200,
+  "data": [
+    {
+      "name": "其他",
+      "updateTime": 1545804042000,
+      "type": "dir",
+      "isDir": true
+    },
+    {
+      "name": "JMerter测试说明书.doc",
+      "updateTime": 1545803706000,
+      "type": "doc",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/JMerter测试说明书.doc",
+      "isDir": false
+    },
+    {
+      "name": "HPI修订情况一览表.xls",
+      "updateTime": 1545803726000,
+      "type": "xls",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/HPI修订情况一览表.xls",
+      "isDir": false
+    },
+    {
+      "name": "制造业智能仓库管理系统产品介绍180313.pptx",
+      "updateTime": 1545803742000,
+      "type": "ppt",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/制造业智能仓库管理系统产品介绍180313.pptx",
+      "isDir": false
+    },
+    {
+      "name": "翼高天成画册1-17.pdf",
+      "updateTime": 1545803770000,
+      "type": "pdf",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/翼高天成画册1-17.pdf",
+      "isDir": false
+    },
+    {
+      "name": "更新日志.txt",
+      "updateTime": 1545803848000,
+      "type": "txt",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/更新日志.txt",
+      "isDir": false
+    },
+    {
+      "name": "index.html",
+      "updateTime": 1545803972000,
+      "type": "htm",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/index.html",
+      "isDir": false
+    },
+    {
+      "name": "honehone_clock_wh.swf",
+      "updateTime": 1545803998000,
+      "type": "flash",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/honehone_clock_wh.swf",
+      "isDir": false
+    },
+    {
+      "name": "试验报告管理平台.pdm",
+      "updateTime": 1545804016000,
+      "type": "file",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/试验报告管理平台.pdm",
+      "isDir": false
+    },
+    {
+      "smUrl": "http://139.199.158.165:8081/file/sm/2018/12/26/a0e0bffa077b4218a0739433439521e2.jpg",
+      "hasSm": true,
+      "name": "a0e0bffa077b4218a0739433439521e2.jpg",
+      "updateTime": 1545804022000,
+      "type": "file",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/a0e0bffa077b4218a0739433439521e2.jpg",
+      "isDir": false
+    },
+    {
+      "smUrl": "http://139.199.158.165:8081/file/sm/2018/12/26/微信图片_20180423141141.jpg",
+      "hasSm": true,
+      "name": "微信图片_20180423141141.jpg",
+      "updateTime": 1545804026000,
+      "type": "file",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/微信图片_20180423141141.jpg",
+      "isDir": false
+    },
+    {
+      "smUrl": "http://139.199.158.165:8081/file/sm/2018/12/26/微信图片_20180423140441.jpg",
+      "hasSm": true,
+      "name": "微信图片_20180423140441.jpg",
+      "updateTime": 1545804396000,
+      "type": "file",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/微信图片_20180423140441.jpg",
+      "isDir": false
+    },
+    {
+      "smUrl": "http://139.199.158.165:8081/file/sm/2018/12/26/微信图片_20180423141146.jpg",
+      "hasSm": true,
+      "name": "微信图片_20180423141146.jpg",
+      "updateTime": 1545804428000,
+      "type": "file",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/微信图片_20180423141146.jpg",
+      "isDir": false
+    },
+    {
+      "name": "runnerw.exe",
+      "updateTime": 1545815206000,
+      "type": "file",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/runnerw.exe",
+      "isDir": false
+    },
+    {
+      "smUrl": "http://139.199.158.165:8081/file/sm/2018/12/26/QQ浏览器截图_20170913085321_E236522E42B34003BBB8707508F188B4.jpg",
+      "hasSm": true,
+      "name": "QQ浏览器截图_20170913085321_E236522E42B34003BBB8707508F188B4.jpg",
+      "updateTime": 1545815222000,
+      "type": "file",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/QQ浏览器截图_20170913085321_E236522E42B34003BBB8707508F188B4.jpg",
+      "isDir": false
+    },
+    {
+      "smUrl": "http://139.199.158.165:8081/file/sm/2018/12/26/Penguins.jpg",
+      "hasSm": true,
+      "name": "Penguins.jpg",
+      "updateTime": 1545815694000,
+      "type": "file",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/Penguins.jpg",
+      "isDir": false
+    },
+    {
+      "smUrl": "http://139.199.158.165:8081/file/sm/2018/12/26/TIM图片20171018133340.png",
+      "hasSm": true,
+      "name": "TIM图片20171018133340.png",
+      "updateTime": 1545815704000,
+      "type": "file",
+      "url": "http://139.199.158.165:8081/file/2018/12/26/TIM图片20171018133340.png",
+      "isDir": false
+    }
+  ]
+}

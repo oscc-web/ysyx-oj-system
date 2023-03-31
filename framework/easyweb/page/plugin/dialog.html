@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin风格的弹窗</title>
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../assets/css/admin.css"/>
+</head>
+<body>
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">admin风格的弹窗</span>
+    <span class="layui-breadcrumb pull-right">
+        <a href="../console/console.html">首页</a>
+        <a><cite>admin风格的弹窗</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">效果演示</div>
+        <div class="layui-card-body text-center" style="padding: 30px 0px;">
+            <button id="btn1" class="layui-btn">表单弹窗</button>
+            <button id="btn2" class="layui-btn">最大最小化</button>
+            <button id="btn3" class="layui-btn">确认弹窗</button>
+            <br><br>
+            <button id="btn4" class="layui-btn layui-btn-normal">更改主题弹窗标题颜色也会跟着变</button>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <pre id="codeDialog1" class="layui-code" lay-title="代码">
+            </pre>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'admin', 'code'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var admin = layui.admin;
+
+        $('#btn1').click(function () {
+            top.layui.admin.open({
+                type: 2,
+                title: '修改密码',
+                shade: 0,
+                area: ['360px', '295px'],
+                content: getProjectUrl() + 'page/tpl/tpl-password.html'
+            });
+        });
+
+        $('#btn2').click(function () {
+            top.layui.admin.open({
+                type: 2,
+                title: '百度一下',
+                shade: 0,
+                maxmin: true,
+                resize: true,
+                area: ['640px', '480px'],
+                content: 'https://baidu.com'
+            });
+        });
+
+        $('#btn3').click(function () {
+            top.layer.confirm('确认删除吗？', {
+                skin: 'layui-layer-admin'
+            }, function (index) {
+                top.layer.close(index);
+                layer.msg('点击了确定');
+            });
+        });
+
+        $('#btn4').click(function () {
+            top.layer.confirm('确认删除吗？', {
+                skin: 'layui-layer-admin',
+                shade: 0
+            }, function (index) {
+                top.layer.close(index);
+                layer.msg('点击了确定');
+            });
+
+            top.layui.admin.popupRight({
+                type: 2,
+                content: getProjectUrl() + 'page/tpl/tpl-theme.html'
+            });
+        });
+
+        // 加载代码文档
+        $.get('dialog1.code', function (res) {
+            $('#codeDialog1').text(res);
+            layui.code({about: false, encode: true});
+        });
+
+    });
+</script>
+</body>
+</html>

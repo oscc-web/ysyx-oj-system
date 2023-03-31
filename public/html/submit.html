@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>窗口</title>
+    <link rel="stylesheet" type="text/css" href=" ../../framework/easyweb/assets/libs/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="../../framework/easyweb/assets/css/admin.css" />
+    <style type="text/css">
+        .layui-form-label {
+            padding-left: 0px;
+            padding-right: 0px;
+            text-align: left;
+        }
+        .layui-form-item .layui-input-inline {
+            margin-right: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-loading">
+        <div class="rubik-loader"></div>
+    </div>
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <form class="layui-form toolbar" method="post" onclick="return false;">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <button class="layui-btn icon-btn layui-btn-sm search" style="display:none;">
+                                    <i class="layui-icon layui-icon-search"></i>搜索
+                                </button>
+                                <button id="import" class="layui-btn icon-btn layui-btn-sm"
+                                        style="margin-left:0px;">
+                                    <i class="layui-icon layui-icon-add-circle"></i>提交代码
+                                </button>
+                                <button id="export" class="layui-btn icon-btn layui-btn-sm">
+                                    <i class="layui-icon layui-icon-table"></i>导出报告
+                                </button>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">提交状态：</label>
+                                <div class="layui-input-inline" style="width:100px;">
+                                    <select lay-filter="submitStatus">
+                                        <option value="all">全部</option>
+                                        <option value="pass">已通过</option>
+                                        <option value="passNot">未通过</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">检索条件：</label>
+                                <div class="layui-input-inline" style="width:170px;">
+                                    <select id="searchCondition">
+                                        <option value="">检索条件</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline" style="width:170px;">
+                                <input id="searchKeywords" class="layui-input" type="text" placeholder="输入关键字" />
+                            </div>
+                            <div class="layui-inline">
+                                <button id="search" class="layui-btn icon-btn layui-btn-sm search">
+                                    <i class="layui-icon layui-icon-search"></i>检索数据
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <table id="submitTable" class="layui-table" lay-filter="submitTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="../../framework/easyweb/assets/libs/layui/layui.js"></script>
+    <script type="text/javascript" src="../../framework/easyweb/assets/js/common.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../js/version.js"></script>
+    <script type="text/javascript">
+        document.write('<script type="text/javascript" src="../js/base.js' + version + '"><\/script>');
+        document.write('<script type="text/javascript" src="../js/submit.js' + version + '"><\/script>');
+    </script>
+</body>
+</html>

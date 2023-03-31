@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="../../assets/images/favicon.ico" rel="icon">
+    <title>EasyWeb管理系统模板</title>
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../assets/css/admin.css"/>
+</head>
+
+<body class="layui-layout-body">
+
+<div class="layui-layout layui-layout-admin">
+
+    <!-- 头部 -->
+    <div class="layui-header">
+        <div class="layui-logo">
+            <img src="../../assets/images/logo.png"/>
+            <cite>&nbsp;EasyWeb Pro&emsp;</cite>
+        </div>
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="flexible" title="侧边伸缩"><i class="layui-icon layui-icon-shrink-right"></i></a>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="refresh" title="刷新"><i class="layui-icon layui-icon-refresh-3"></i></a>
+            </li>
+            <li class="layui-nav-item layui-hide-xs layui-this" lay-unselect><a lay-id="xt1">系统一</a></li>
+            <li class="layui-nav-item layui-hide-xs" lay-unselect><a lay-id="xt2">系统二</a></li>
+            <li class="layui-nav-item layui-hide-xs" lay-unselect><a lay-id="xt3">系统三</a></li>
+            <li class="layui-nav-item layui-hide-sm layui-show-xs-inline-block" lay-unselect>
+                <a>更多</a>
+                <dl class="layui-nav-child">
+                    <dd lay-unselect><a lay-id="xt1">系统一</a></dd>
+                    <dd lay-unselect><a lay-id="xt2">系统二</a></dd>
+                    <dd lay-unselect><a lay-id="xt3">系统二</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item" lay-unselect>
+                <a>
+                    <img src="../../assets/images/head.png" class="layui-nav-img">
+                    <cite>管理员</cite>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 侧边栏 -->
+    <div class="layui-side">
+        <div class="layui-side-scroll">
+            <!-- 系统一的菜单 -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="admin-side-nav" style="margin: 15px 0;">
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-home"></i>&emsp;<cite>Dashboard</cite></a>
+                    <dl class="layui-nav-child">
+                        <dd><a lay-href="../../page/console/console.html">控制台</a></dd>
+                        <dd><a lay-href="../../page/console/console2.html">分析页</a></dd>
+                        <dd><a lay-href="../../page/console/welcome.html">欢迎页</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-form"></i>&emsp;<cite>表单页</cite></a>
+                    <dl class="layui-nav-child">
+                        <dd><a lay-href="../../page/template/form/form-basic.html">基础表单</a></dd>
+                        <dd><a lay-href="../../page/template/form/form-advance.html">复杂表单</a></dd>
+                        <dd><a lay-href="../../page/template/form/form-step.html">分步表单</a></dd>
+                    </dl>
+                </li>
+            </ul>
+
+            <!-- 系统二的菜单，加layui-hide隐藏 -->
+            <ul class="layui-nav layui-nav-tree layui-hide" lay-filter="admin-side-nav" style="margin: 15px 0;">
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-table"></i>&emsp;<cite>表格页</cite></a>
+                    <dl class="layui-nav-child">
+                        <dd><a lay-href="../../page/template/table/table-basic.html">数据表格</a></dd>
+                        <dd><a lay-href="../../page/template/table/table-advance.html">复杂查询</a></dd>
+                        <dd><a lay-href="../../page/template/table/table-tree.html">树形表格</a></dd>
+                    </dl>
+                </li>
+            </ul>
+
+            <!-- 系统三的菜单，加layui-hide隐藏 -->
+            <ul class="layui-nav layui-nav-tree layui-hide" lay-filter="admin-side-nav" style="margin: 15px 0;">
+                <li class="layui-nav-item">
+                    <a>
+                        <i class="layui-icon layui-icon-face-surprised"></i>&emsp;<cite>错误页</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a lay-href="../../page/template/error/error-500.html">500</a></dd>
+                        <dd><a lay-href="../../page/template/error/error-404.html">404</a></dd>
+                        <dd><a lay-href="../../page/template/error/error-403.html">403</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 主体部分 -->
+    <div class="layui-body">
+        <div class="layui-tab" lay-allowClose="true" lay-filter="admin-pagetabs">
+            <ul class="layui-tab-title">
+            </ul>
+            <div class="layui-tab-content">
+            </div>
+        </div>
+        <div class="layui-icon admin-tabs-control layui-icon-prev" ew-event="leftPage"></div>
+        <div class="layui-icon admin-tabs-control layui-icon-next" ew-event="rightPage"></div>
+        <div class="layui-icon admin-tabs-control layui-icon-down">
+            <ul class="layui-nav admin-tabs-select" lay-filter="admin-pagetabs-nav">
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;"></a>
+                    <dl class="layui-nav-child layui-anim-fadein">
+                        <dd ew-event="closeThisTabs" lay-unselect><a href="javascript:;">关闭当前标签页</a></dd>
+                        <dd ew-event="closeOtherTabs" lay-unselect><a href="javascript:;">关闭其它标签页</a></dd>
+                        <dd ew-event="closeAllTabs" lay-unselect><a href="javascript:;">关闭全部标签页</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 底部 -->
+    <div class="layui-footer">
+        Copyright © 2018 EasyWeb All rights reserved.
+    </div>
+
+    <!-- 手机屏幕遮罩层 -->
+    <div class="site-mobile-shade"></div>
+
+</div>
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'element', 'admin', 'index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var index = layui.index;
+
+        // 默认加载主页
+        index.loadView({
+            menuPath: '../../page/console/console.html',
+            menuName: '<i class="layui-icon layui-icon-home"></i>'
+        });
+
+        // 切换侧边菜单
+        function changeSideNav(index) {
+            $('ul[lay-filter="admin-side-nav"]').addClass('layui-hide');
+            $('ul[lay-filter="admin-side-nav"]').eq(index).removeClass('layui-hide');
+            $('.layui-header .layui-nav .layui-nav-item').removeClass('layui-this');
+            if (admin.getPageWidth() <= 750) {
+                admin.flexible(false);  // 展开侧边栏
+            }
+        };
+
+        // 系统一点击事件
+        $('[lay-id=xt1]').click(function () {
+            changeSideNav(0);
+            $('[lay-id=xt1]').parent('.layui-nav-item').addClass('layui-this');
+        });
+
+        // 系统二点击事件
+        $('[lay-id=xt2]').click(function () {
+            changeSideNav(1);
+            $('[lay-id=xt2]').parent('.layui-nav-item').addClass('layui-this');
+        });
+
+        // 系统三点击事件
+        $('[lay-id=xt3]').click(function () {
+            changeSideNav(2);
+            $('[lay-id=xt3]').parent('.layui-nav-item').addClass('layui-this');
+        });
+
+        layer.open({
+            type: 1,
+            title: false,
+            content: '<div style="padding: 10px;color: red;">↑↑ 点击这里可以切换系统哦！</div>',
+            shade: 0,
+            area: '260px',
+            offset: ['70px', '330px']
+        });
+    });
+</script>
+</body>
+
+</html>

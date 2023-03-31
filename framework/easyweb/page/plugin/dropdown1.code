@@ -1,0 +1,57 @@
+// 通过data-dropdown属性绑定下拉菜单
+<button data-dropdown="#dropdown1" class="layui-btn icon-btn">
+    <i class="layui-icon layui-icon-triangle-d"></i>下左弹出
+</button>
+//
+<!-- 下拉菜单 -->
+<div class="dropdown-menu" id="dropdown1">
+    <ul>
+        <li><a class="edit">修改</a></li>
+        <li><a class="del">删除</a></li>
+        <li><a class="print">打印</a></li>
+    </ul>
+</div>
+//
+// 下拉菜单依赖于dropdown模块
+layui.use(['dropdown'], function () {
+    var dropdown = layui.dropdown;
+
+});
+//
+// 下拉菜单的弹出位置通过data-anchor设置
+<button data-dropdown="#dropdown1" data-anchor="left-center" class="layui-btn icon-btn">
+    右中弹出<i class="layui-icon layui-icon-triangle-d right"></i>
+</button>
+//
+// data-anchor是指的小三角的位置，left-center表示小三角在下拉菜单的左边的中间位置，
+// 所以下拉菜单的弹出位置是在按钮的右边中间
+//
+// 标题：li上面加title的class就是标题的样式
+<div class="dropdown-menu" id="dropdown1">
+    <ul>
+        <li class="title">请选择操作</li>
+        <li><a class="edit">修改</a></li>
+        <li><a class="del">删除</a></li>
+        <li><a class="print">打印</a></li>
+    </ul>
+</div>
+//
+// 夜间主题：dropdown-menu上面加dark的class
+<div class="dropdown-menu dark" id="dropdown1">
+    <ul>
+        <li class="title">请选择操作</li>
+        <li><a class="edit">修改</a></li>
+        <li><a class="del">删除</a></li>
+        <li><a class="print">打印</a></li>
+    </ul>
+</div>
+//
+// 遮罩层：添加fixed和dropdown-has-shade两个class
+<div class="dropdown-menu fixed dropdown-has-shade" id="dropdown4">
+    <ul>
+        <li class="title">请选择操作</li>
+        <li><a class="edit">修改</a></li>
+        <li><a class="del">删除</a></li>
+        <li><a class="print">打印</a></li>
+    </ul>
+</div>

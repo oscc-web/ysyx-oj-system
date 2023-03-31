@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="./assets/images/favicon.ico" rel="icon">
+    <title>EasyWeb管理系统模板</title>
+    <link rel="stylesheet" href="./assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="./assets/css/admin.css"/>
+</head>
+
+<body class="layui-layout-body">
+
+<div class="layui-layout layui-layout-admin">
+
+    <!-- 头部 -->
+    <div class="layui-header">
+
+        <div class="layui-logo">
+            <img src="./assets/images/logo.png"/>
+            <cite>&nbsp;EasyWeb Pro&emsp;</cite>
+        </div>
+
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="flexible" title="侧边伸缩"><i class="layui-icon layui-icon-shrink-right"></i></a>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="refresh" title="刷新"><i class="layui-icon layui-icon-refresh-3"></i></a>
+            </li>
+        </ul>
+
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item" lay-unselect>
+                <a id="btnMessage" title="消息"><i class="layui-icon layui-icon-notice"></i></a>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="note" title="便签"><i class="layui-icon layui-icon-note"></i></a>
+            </li>
+            <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                <a ew-event="fullScreen" title="全屏"><i class="layui-icon layui-icon-screen-full"></i></a>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+                <a>
+                    <img src="assets/images/head.png" class="layui-nav-img">
+                    <cite>管理员</cite>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd lay-unselect>
+                        <a ew-href="page/template/user-info.html">个人中心</a>
+                    </dd>
+                    <dd lay-unselect>
+                        <a id="setPsw">修改密码</a>
+                    </dd>
+                    <hr>
+                    <dd lay-unselect>
+                        <a id="btnLogout">退出</a>
+                    </dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+                <a ew-event="theme" title="主题"><i class="layui-icon layui-icon-more-vertical"></i></a>
+            </li>
+        </ul>
+
+    </div>
+
+    <!-- 侧边栏 -->
+    <div class="layui-side">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree arrow2" lay-filter="admin-side-nav" lay-accordion="true"
+                style="margin: 15px 0;">
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-home"></i>&emsp;<cite>Dashboard</cite></a>
+                    <dl class="layui-nav-child">
+                        <dd><a lay-href="page/console/console.html">控制台</a></dd>
+                        <dd><a lay-href="page/console/console2.html">分析页</a></dd>
+                        <dd><a lay-href="page/console/welcome.html">欢迎页</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-set"></i>&emsp;<cite>系统管理</cite></a>
+                    <dl class="layui-nav-child">
+                        <dd><a lay-href="page/system/user.html">用户管理</a></dd>
+                        <dd><a lay-href="page/system/role.html">角色管理</a></dd>
+                        <dd><a lay-href="page/system/authorities.html">菜单管理</a></dd>
+                        <dd><a lay-href="page/system/loginRecord.html">登录日志</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-template"></i>&emsp;<cite>模板页面</cite></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a>表单页</a>
+                            <dl class="layui-nav-child">
+                                <dd><a lay-href="page/template/form/form-basic.html">基础表单</a></dd>
+                                <dd><a lay-href="page/template/form/form-advance.html">复杂表单</a></dd>
+                                <dd><a lay-href="page/template/form/form-step.html">分步表单</a></dd>
+                            </dl>
+                        </dd>
+                        <dd>
+                            <a>表格页</a>
+                            <dl class="layui-nav-child">
+                                <dd><a lay-href="page/template/table/table-basic.html">数据表格</a></dd>
+                                <dd><a lay-href="page/template/table/table-advance.html">复杂查询</a></dd>
+                                <dd><a lay-href="page/template/table/table-tree.html">树形表格</a></dd>
+                                <dd><a lay-href="page/template/table/table-ltrt.html">左树右表</a></dd>
+                                <dd><a lay-href="page/template/table/table-img.html">表格缩略图</a></dd>
+                            </dl>
+                        </dd>
+                        <dd>
+                            <a>错误页</a>
+                            <dl class="layui-nav-child">
+                                <dd><a lay-href="page/template/error/error-500.html">500</a></dd>
+                                <dd><a lay-href="page/template/error/error-404.html">404</a></dd>
+                                <dd><a lay-href="page/template/error/error-403.html">403</a></dd>
+                            </dl>
+                        </dd>
+                        <dd>
+                            <a>登录页</a>
+                            <dl class="layui-nav-child">
+                                <dd><a href="page/login/login.html" target="_blank">登录一</a></dd>
+                                <dd><a href="page/login/login2.html" target="_blank">登录二</a></dd>
+                                <dd><a href="page/login/login3.html" target="_blank">登录三</a></dd>
+                            </dl>
+                        </dd>
+                        <dd><a lay-href="page/template/user-info.html">个人中心</a></dd>
+                        <dd><a lay-href="page/template/file/fileMain.html">文件管理</a></dd>
+                        <dd><a lay-href="page/other/empty.html">空白页</a></dd>
+                        <dd><a href="page/other/side-more.html" target="_blank">多系统</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-app"></i>&emsp;<cite>扩展组件</cite></a>
+                    <dl class="layui-nav-child">
+                        <dd><a lay-href="page/plugin/dropdown.html">下拉菜单</a></dd>
+                        <dd><a lay-href="page/plugin/notice.html">消息通知</a></dd>
+                        <dd><a lay-href="page/plugin/dialog.html">admin风格弹窗</a></dd>
+                        <dd><a lay-href="page/plugin/other.html">更多扩展</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-release"></i>&emsp;<cite>LayUI组件</cite></a>
+                    <dl class="layui-nav-child">
+                        <dd><a lay-href="https://www.layui.com/demo/button.html">组件演示</a></dd>
+                        <dd><a lay-href="https://www.layui.com/doc/element/button.html#use">layui文档</a></dd>
+                        <dd><a lay-href="https://layer.layui.com/">layer弹窗组件</a></dd>
+                        <dd><a lay-href="https://www.layui.com/laydate/">laydate日期组件</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a><i class="layui-icon layui-icon-unlink"></i>&emsp;<cite>多级菜单</cite></a>
+                    <dl class="layui-nav-child">
+                        <dd><a>二级菜单</a></dd>
+                        <dd>
+                            <a>二级菜单</a>
+                            <dl class="layui-nav-child">
+                                <dd><a>三级菜单</a></dd>
+                                <dd>
+                                    <a>三级菜单</a>
+                                    <dl class="layui-nav-child">
+                                        <dd><a>四级菜单</a></dd>
+                                        <dd>
+                                            <a>四级菜单</a>
+                                            <dl class="layui-nav-child">
+                                                <dd><a>五级菜单</a></dd>
+                                                <dd>
+                                                    <a lay-href="https://baidu.com">百度一下</a>
+                                                </dd>
+                                            </dl>
+                                        </dd>
+                                    </dl>
+                                </dd>
+                            </dl>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a lay-href="//baidu.com"><i class="layui-icon layui-icon-unlink"></i>&emsp;<cite>一级菜单</cite></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 主体部分 -->
+    <div class="layui-body">
+        <div class="layui-tab" lay-allowClose="true" lay-filter="admin-pagetabs">
+            <ul class="layui-tab-title">
+            </ul>
+            <div class="layui-tab-content">
+            </div>
+        </div>
+        <div class="layui-icon admin-tabs-control layui-icon-prev" ew-event="leftPage"></div>
+        <div class="layui-icon admin-tabs-control layui-icon-next" ew-event="rightPage"></div>
+        <div class="layui-icon admin-tabs-control layui-icon-down">
+            <ul class="layui-nav admin-tabs-select" lay-filter="admin-pagetabs-nav">
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;"></a>
+                    <dl class="layui-nav-child layui-anim-fadein">
+                        <dd ew-event="closeThisTabs" lay-unselect><a href="javascript:;">关闭当前标签页</a></dd>
+                        <dd ew-event="closeOtherTabs" lay-unselect><a href="javascript:;">关闭其它标签页</a></dd>
+                        <dd ew-event="closeAllTabs" lay-unselect><a href="javascript:;">关闭全部标签页</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 底部 -->
+    <div class="layui-footer">
+        Copyright © 2018 <a href="https://easyweb.vip" target="_blank">EasyWeb</a> All rights reserved.
+        <span class="pull-right">Version 3.0.9</span>
+    </div>
+
+    <!-- 手机屏幕遮罩层 -->
+    <div class="site-mobile-shade"></div>
+
+</div>
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="./assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="./assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'element', 'admin', 'index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var admin = layui.admin;
+        var index = layui.index;
+
+        index.loadSetting();  // 加载本地缓存的设置属性
+
+        // 默认加载主页
+        index.loadView({
+            menuPath: 'page/console/console.html',
+            menuName: '<i class="layui-icon layui-icon-home"></i>'
+        });
+
+        // 消息点击事件
+        $('#btnMessage').click(function () {
+            admin.popupRight({
+                type: 2,
+                content: 'page/tpl/tpl-message.html'
+            });
+        });
+
+        // 修改密码点击事件
+        $('#setPsw').click(function () {
+            admin.open({
+                type: 2,
+                title: '修改密码',
+                shade: 0,
+                content: 'page/tpl/tpl-password.html'
+            });
+        });
+
+        // 退出登录点击事件
+        $('#btnLogout').click(function () {
+            layer.confirm('确定退出登录？', {
+                skin: 'layui-layer-admin'
+            }, function () {
+                location.replace('page/other/login.html');
+            });
+        });
+
+    });
+</script>
+</body>
+
+</html>

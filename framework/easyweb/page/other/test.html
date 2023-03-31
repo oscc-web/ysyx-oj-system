@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../assets/css/admin.css"/>
+</head>
+<body>
+
+<div class="layui-fluid">
+    <h2>我是三级菜单</h2><br>
+    <a ew-href="https://baidu.com" class="layui-btn">打开百度</a>
+    <button data-dropdown="#dropdown-oper" class="layui-btn icon-btn">下拉菜单<i class="layui-icon">&#xe625;</i></button>
+    <button id="toast" class="layui-btn">消息通知</button>
+</div>
+
+<div class="dropdown-menu dropdown-anchor-top-right dropdown-has-anchor" id="dropdown-oper">
+    <ul>
+        <li><a href="#">Item 1</a></li>
+        <li class="divider"></li>
+        <li><a href="#">Item 2</a></li>
+        <li class="divider"></li>
+        <li><a href="#">Item 3</a></li>
+    </ul>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/js/common.js"></script>
+<script>
+    layui.use(['admin', 'dropdown', 'toast'], function () {
+        var $ = layui.jquery;
+        var admin = layui.admin;
+        var dropdown = layui.dropdown;
+        var toast = layui.toast;
+
+        $('#toast').click(function () {
+            toast.show({
+                title: 'Hello World!',
+                message: 'I am a basic toast message!'
+            });
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html class="bg-white">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>窗口</title>
+    <link rel="stylesheet" type="text/css" href="../../framework/easyweb/assets/libs/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="../../framework/easyweb/assets/css/admin.css" />
+</head>
+<body>
+    <div class="page-loading">
+        <div class="rubik-loader"></div>
+    </div>
+    <form class="layui-form model-form" method="post" onclick="return false;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户账号：<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input id="userAccount" class="layui-input" name="userAccount" type="text"
+                       placeholder="请输入用户账号" lay-verType="tips" lay-verify="required" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户密码：<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input id="userPassword" class="layui-input" name="userPassword" type="password"
+                       placeholder="请输入用户密码" lay-verType="tips" lay-verify="required" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block text-right">
+                <button class="layui-btn layui-btn-sm" type="submit" lay-filter="confirm" lay-submit>
+                    <i class="layui-icon layui-icon-ok"></i>确定
+                </button>
+                <button class="layui-btn layui-btn-sm" type="button" ew-event="closeDialog">
+                    <i class="layui-icon layui-icon-close"></i>取消
+                </button>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript" src="../../framework/easyweb/assets/libs/layui/layui.js"></script>
+    <script type="text/javascript" src="../../framework/easyweb/assets/js/common.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../js/version.js"></script>
+    <script type="text/javascript">
+        document.write('<script type="text/javascript" src="../js/base.js' + version + '"><\/script>');
+        document.write('<script type="text/javascript" src="../js/login.js' + version + '"><\/script>');
+    </script>
+</body>
+</html>

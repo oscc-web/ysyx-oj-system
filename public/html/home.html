@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>主页</title>
+    <link rel="stylesheet" type="text/css" href="../../framework/easyweb/assets/libs/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="../../framework/easyweb/assets/css/admin.css" />
+    <style type="text/css">
+        .layui-badge-dot {
+            top: -1px;
+            margin-right: 5px;
+        }
+        .layui-card-header {
+            font-size: 18px;
+        }
+        .layui-card-body {
+            height: 250px;
+        }
+        .layui-card-body a {
+            color: cornflowerblue;
+        }
+    </style>
+</head>
+<body style="padding:0 300px;">
+    <div class="page-loading">
+        <div class="rubik-loader"></div>
+    </div>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space10">
+            <div class="layui-col-sm6 layui-col-md6 layui-col-lg6">
+                <div class="layui-card">
+                    <div class="layui-card-header"><span class="layui-badge-dot"></span>简介</div>
+                    <div class="layui-card-body">
+                        <div>一生一芯在线评测系统由组内Web团队开发，提供对一生一芯<span style="font-weight:bold;">预先学习阶段</span>任务的在线评测和结果统计功能。目前该系统处于<span style="font-weight:bold;">内部测试</span>状态，如果您在使用过程中发现系统存在问题，欢迎在本项目的<a href="https://github.com/myyerrol/ysyx-oj-system" target="_blank">GitHub仓库</a>中提Issues，或向Web团队负责人的<a href="mailto:myyerrol@126.com" target="_blank">电子邮箱</a>发送问题报告。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md6 layui-col-lg6">
+                <div class="layui-card">
+                    <div class="layui-card-header"><span class="layui-badge-dot"></span>公告</div>
+                    <div class="layui-card-body">
+                        <ul>
+                            <li><span class="layui-badge-dot"></span>2023-03-30：完成前端界面搭建</li>
+                            <li><span class="layui-badge-dot"></span>2023-03-29：完成整体架构设计</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="../../framework/easyweb/assets/libs/layui/layui.js"></script>
+    <script type="text/javascript" src="../../framework/easyweb/assets/js/common.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="../js/version.js"></script>
+    <script type="text/javascript">
+        document.write('<script type="text/javascript" src="../js/base.js' + version + '"><\/script>');
+        document.write('<script type="text/javascript" src="../js/home.js' + version + '"><\/script>');
+    </script>
+</body>
+</html>

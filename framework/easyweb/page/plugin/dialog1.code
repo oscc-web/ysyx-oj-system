@@ -1,0 +1,33 @@
+layui.use(['layer', 'admin'], function () {
+    var layer = layui.layer;
+    var admin = layui.admin;
+    //
+    // 表单弹窗，使用admin.open弹出
+    admin.open({
+        type: 2,
+        title: '修改密码',
+        shade: 0,
+        area: ['360px', '295px'],
+        content: getProjectUrl() + 'page/tpl/tpl-password.html'
+    });
+    //
+    // 开启最大化、最小化，配置maxmin属性
+    admin.open({
+        type: 2,
+        title: '百度一下',
+        shade: 0,
+        maxmin: true,
+        resize: true,
+        area: ['640px', '480px'],
+        content: 'https://baidu.com'
+    });
+    //
+    // 确认弹窗，通过skin指定皮肤
+    layer.confirm('确认删除吗？', {
+        skin: 'layui-layer-admin'
+    }, function (index) {
+        top.layer.close(index);
+        layer.msg('点击了确定');
+    });
+    //
+});

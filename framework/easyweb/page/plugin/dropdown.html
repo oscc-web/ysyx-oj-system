@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>下拉菜单</title>
+    <link rel="stylesheet" href="../../assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../assets/css/admin.css"/>
+    <style>
+        .btn-item {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn-item .layui-btn {
+            margin-right: 60px;
+        }
+
+        .btn-item .layui-btn:last-child {
+            margin-right: 0px;
+        }
+
+        @media screen and (max-width: 450px) {
+
+            .btn-item .layui-btn {
+                margin-right: -5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 关闭Tab时顶部标题 -->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">下拉菜单</span>
+    <span class="layui-breadcrumb pull-right">
+        <a href="../console/console.html">首页</a>
+        <a><cite>下拉菜单</cite></a>
+    </span>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">分离式的下拉菜单</div>
+                <div class="layui-card-body">
+                    <p>下拉菜单为独立结构，可以由任何元素触发，多个元素可以同时绑定一个下拉菜单。</p>
+                    <!-- 下弹出 -->
+                    <div class="btn-item">
+                        <button data-dropdown="#dropdown1" class="layui-btn icon-btn">
+                            <i class="layui-icon layui-icon-triangle-d"></i>下左弹出
+                        </button>
+                        <button data-dropdown="#dropdown1" data-anchor="top-center" class="layui-btn icon-btn">
+                            下中<i class="layui-icon layui-icon-triangle-d"></i>弹出
+                        </button>
+                        <button data-dropdown="#dropdown1" data-anchor="top-right" class="layui-btn icon-btn">
+                            下右弹出<i class="layui-icon layui-icon-triangle-d"></i>
+                        </button>
+                    </div>
+                    <!-- 上弹出 -->
+                    <div class="btn-item">
+                        <button data-dropdown="#dropdown1" data-anchor="bottom-left" class="layui-btn icon-btn">
+                            <i class="layui-icon layui-icon-triangle-d top"></i>上左弹出
+                        </button>
+                        <button data-dropdown="#dropdown1" data-anchor="bottom-center" class="layui-btn icon-btn">
+                            上中<i class="layui-icon layui-icon-triangle-d top"></i>弹出
+                        </button>
+                        <button data-dropdown="#dropdown1" data-anchor="bottom-right" class="layui-btn icon-btn">
+                            上右弹出<i class="layui-icon layui-icon-triangle-d top"></i>
+                        </button>
+                    </div>
+                    <!-- 左弹出 -->
+                    <div class="btn-item">
+                        <button data-dropdown="#dropdown1" data-anchor="left-bottom" class="layui-btn icon-btn">
+                            右下弹出<i class="layui-icon layui-icon-triangle-d right"></i>
+                        </button>
+                        <button data-dropdown="#dropdown1" data-anchor="right-center" class="layui-btn icon-btn">
+                            左中弹出<i class="layui-icon layui-icon-triangle-d left"></i>
+                        </button>
+                        <button data-dropdown="#dropdown1" data-anchor="right-bottom" class="layui-btn icon-btn">
+                            左下弹出<i class="layui-icon layui-icon-triangle-d left"></i>
+                        </button>
+                    </div>
+                    <!-- 右弹出 -->
+                    <div class="btn-item">
+                        <button data-dropdown="#dropdown1" data-anchor="left-top" class="layui-btn icon-btn">
+                            右上弹出<i class="layui-icon layui-icon-triangle-d right"></i>
+                        </button>
+                        <button data-dropdown="#dropdown1" data-anchor="left-center" class="layui-btn icon-btn">
+                            右中弹出<i class="layui-icon layui-icon-triangle-d right"></i>
+                        </button>
+                        <button data-dropdown="#dropdown1" data-anchor="right-top" class="layui-btn icon-btn">
+                            左上弹出<i class="layui-icon layui-icon-triangle-d left"></i>
+                        </button>
+                    </div>
+                    <!-- 更多样式 -->
+                    <div class="btn-item" style="margin-bottom: 30px;">
+                        <button data-dropdown="#dropdown2" data-anchor="bottom-left" class="layui-btn icon-btn">
+                            <i class="layui-icon layui-icon-triangle-d top"></i>标题样式
+                        </button>
+                        <button data-dropdown="#dropdown3" data-anchor="bottom-center" class="layui-btn icon-btn">
+                            夜间样式<i class="layui-icon layui-icon-triangle-d top"></i>
+                        </button>
+                        <button data-dropdown="#dropdown4" data-anchor="bottom-right" class="layui-btn icon-btn">
+                            带遮罩层<i class="layui-icon layui-icon-triangle-d top"></i>
+                        </button>
+                    </div>
+
+                    <!-- 下拉菜单 -->
+                    <div class="dropdown-menu" id="dropdown1">
+                        <ul>
+                            <li><a class="edit">修改</a></li>
+                            <li><a class="del">删除</a></li>
+                            <li><a class="print">打印</a></li>
+                        </ul>
+                    </div>
+                    <!-- 下拉菜单(带标题的下拉菜单) -->
+                    <div class="dropdown-menu" id="dropdown2">
+                        <ul>
+                            <li class="title">请选择操作</li>
+                            <li><a class="edit">修改</a></li>
+                            <li><a class="del">删除</a></li>
+                            <li><a class="print">打印</a></li>
+                        </ul>
+                    </div>
+                    <!-- 下拉菜单(夜间模式) -->
+                    <div class="dropdown-menu dark" id="dropdown3">
+                        <ul>
+                            <li class="title">请选择操作</li>
+                            <li><a class="edit">修改</a></li>
+                            <li><a class="del">删除</a></li>
+                            <li><a class="print">打印</a></li>
+                        </ul>
+                    </div>
+                    <!-- 下拉菜单(带遮罩层) -->
+                    <div class="dropdown-menu fixed dropdown-has-shade" id="dropdown4">
+                        <ul>
+                            <li class="title">请选择操作</li>
+                            <li><a class="edit">修改</a></li>
+                            <li><a class="del">删除</a></li>
+                            <li><a class="print">打印</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="layui-text text-center" style="margin-top: 40px;">
+                        查看<a ew-href="page/template/table/table-basic.html" href="javascript:;">表格中使用示例</a>，
+                        更多参数说明请查看<a href="https://whvse.gitee.io/easyweb-html/iframe/#/?id=_123下拉菜单" target="_blank">开发文档</a>！
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">嵌入式的下拉菜单</div>
+                <div class="layui-card-body">
+                    <p>下拉菜单和按钮写在一起，一个按钮对应一个下拉菜单。</p>
+                    <div class="btn-item" style="margin-top: 65px;">
+                        <!-- 大型按钮 -->
+                        <ul class="layui-nav nav-btn nav-btn-lg">
+                            <li class="layui-nav-item" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                        <!-- 正常按钮 -->
+                        <ul class="layui-nav nav-btn">
+                            <li class="layui-nav-item" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                        <!-- 小型按钮 -->
+                        <ul class="layui-nav nav-btn nav-btn-sm">
+                            <li class="layui-nav-item" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                        <!-- 超小型按钮 -->
+                        <ul class="layui-nav nav-btn nav-btn-xs">
+                            <li class="layui-nav-item" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 下拉按钮组 -->
+                    <div class="btn-item">
+                        <ul class="layui-nav nav-btn">
+                            <li class="layui-nav-item layui-bg-blue" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                            <li class="layui-nav-item layui-bg-red" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                            <li class="layui-nav-item layui-bg-orange" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 小型按钮组 -->
+                    <div class="btn-item">
+                        <ul class="layui-nav nav-btn nav-btn-sm">
+                            <li class="layui-nav-item text-center" lay-unselect>
+                                <a>普通按钮</a>
+                            </li>
+                            <li class="layui-nav-item layui-bg-blue" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                            <li class="layui-nav-item layui-bg-red" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                            <li class="layui-nav-item layui-bg-orange" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 超小型按钮组 -->
+                    <div class="btn-item">
+                        <ul class="layui-nav nav-btn nav-btn-xs">
+                            <li class="layui-nav-item text-center" lay-unselect>
+                                <a>普通按钮</a>
+                            </li>
+                            <li class="layui-nav-item layui-bg-blue" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                            <li class="layui-nav-item layui-bg-red" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                            <li class="layui-nav-item layui-bg-orange" lay-unselect>
+                                <a>下拉按钮</a>
+                                <dl class="layui-nav-child layui-anim-fadein">
+                                    <dd lay-unselect><a>修改用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>删除用户</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>打印用户</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 下拉菜单位置 -->
+                    <div class="btn-item" style="margin-bottom: 43px;">
+                        <ul class="layui-nav nav-btn">
+                            <li class="layui-nav-item layui-bg-blue" lay-unselect>
+                                <a>上右弹出</a>
+                                <dl class="layui-nav-child layui-anim-fadein align-top">
+                                    <dd lay-unselect><a>&emsp;修改用户&emsp;</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>&emsp;删除用户&emsp;</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>&emsp;打印用户&emsp;</a></dd>
+                                </dl>
+                            </li>
+                            <li class="layui-nav-item layui-bg-red" lay-unselect>
+                                <a>上左弹出</a>
+                                <dl class="layui-nav-child layui-anim-fadein align-top align-right">
+                                    <dd lay-unselect><a>&emsp;修改用户&emsp;</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>&emsp;删除用户&emsp;</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>&emsp;打印用户&emsp;</a></dd>
+                                </dl>
+                            </li>
+                            <li class="layui-nav-item layui-bg-orange" lay-unselect>
+                                <a>下右弹出</a>
+                                <dl class="layui-nav-child layui-anim-fadein align-right">
+                                    <dd lay-unselect><a>&emsp;修改用户&emsp;</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>&emsp;删除用户&emsp;</a></dd>
+                                    <hr>
+                                    <dd lay-unselect><a>&emsp;打印用户&emsp;</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">分离式的下拉菜单</div>
+                <div class="layui-card-body">
+                    <pre id="codeDropdown1" class="layui-code" lay-title="代码">
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm12 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">嵌入式的下拉菜单</div>
+                <div class="layui-card-body">
+                    <pre id="codeDropdown2" class="layui-code" lay-title="代码">
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="../../assets/js/common.js"></script>
+<script>
+    layui.use(['layer', 'code', 'element', 'dropdown'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var element = layui.element;
+        var dropdown = layui.dropdown;
+
+        $('.edit').click(function () {
+            layer.msg('点击了修改');
+        });
+
+        $('.del').click(function () {
+            layer.msg('点击了删除');
+        });
+
+        $('.print').click(function () {
+            layer.msg('点击了打印');
+        });
+
+        // 加载代码文档
+        $.get('dropdown1.code', function (res) {
+            $('#codeDropdown1').text(res);
+            $.get('dropdown2.code', function (res2) {
+                $('#codeDropdown2').text(res2);
+                layui.code({about: false, encode: true});
+            });
+        });
+
+    });
+</script>
+</body>
+</html>
