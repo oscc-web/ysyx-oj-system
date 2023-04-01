@@ -22,6 +22,17 @@
             left: 0px;
             text-align: center;
         }
+        .layui-layout-right .layui-nav-item cite {
+            margin-right: 5px;
+        }
+        .layui-nav .layui-badge {
+            position: relative;
+            top: 0px;
+            margin: 0px;
+        }
+        .ysyx-statusbar-left dd {
+            text-align: left !important;
+        }
     </style>
 </head>
 <body class="layui-layout-body">
@@ -47,14 +58,37 @@
             </ul>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item" lay-unselect>
-                    <a><i class="layui-icon layui-icon-user"></i>
-                        <span id="userName" style="margin-right:5px;">用户中心</span>
+                    <a style="padding-right:0px;">
+                        <cite id="userLoginStatus"><span class="layui-badge">未登录</span></cite>
+                    </a>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a>
+                        <i class="layui-icon layui-icon-username"></i>
+                        <cite id="userInfo">用户信息</cite>
+                    </a>
+                    <dl class="layui-nav-child ysyx-statusbar-left" style="width:220px;">
+                        <dd lay-unselect>
+                            <a id="userName">
+                                用户姓名：<span>暂无</span>
+                            </a>
+                        </dd>
+                        <dd lay-unselect>
+                            <a id="userType">
+                                用户类型：<span>暂无</span>
+                            </a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a><i class="layui-icon layui-icon-app"></i>
+                        <cite id="center">操作中心</cite>
                     </a>
                     <dl class="layui-nav-child">
                         <!-- <dd lay-unselect><a id="register">注册</a></dd> -->
                         <dd lay-unselect><a id="login">登录</a></dd>
-                        <hr>
-                        <dd lay-unselect><a id="logout">退出</a></dd>
+                        <!-- <hr> -->
+                        <dd lay-unselect><a id="logout" style="display:none;">退出</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item" lay-unselect>

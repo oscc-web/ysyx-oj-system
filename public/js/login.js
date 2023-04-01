@@ -9,7 +9,9 @@ layui.use(["admin", "form", "layer"], function() {
             type: "post",
             data: JSON.stringify(data.field),
             success: function(res) {
-                if (res == "success") {
+                var obj = JSON.parse(res);
+                if (obj.msg === "success") {
+                    admin.putTempData("userObj", obj.data);
                     layer.msg("登录成功！", {
                         time: 1000
                     }, function() {
