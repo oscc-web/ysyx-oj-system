@@ -90,13 +90,15 @@ module.exports = {
             console.log("用户账号：", verifyObj.userAccount);
             logLoginWriteStream.write("用户账号：" + verifyObj.userAccount + "\n");
 
-            const jsonData = json.getJSONDataByField(
-                path.join(rootDir, "json/user.json"),
+            let userArr = json.getJSONDataByField(
+                path.join(rootDir, "jsons/user.json"),
                 "equal",
                 "userAccount",
                 verifyObj.userAccount);
-            console.log(jsonData);
-            if (jsonData.length === 1) {
+            console.log(userArr);
+
+            if (userArr.length === 1 &&
+                userArr[0].userPassword === verifyObj.userPassword) {
                 console.log("验证成功");
                 logLoginWriteStream.write("验证成功\n\n");
 
