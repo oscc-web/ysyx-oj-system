@@ -81,19 +81,34 @@ module.exports = {
         else {
             jsonArr = fileName;
         }
+
         return this.handleJSONDataOrder(jsonArr,
                                         sortField,
                                         sortType,
                                         sortOrder);
     },
-    getJSONDataByPage: function(fileName, pageIndex, pagePerNum) {
-        const jsonArr = this.getJSONDataAll(fileName);
+    getJSONDataByPage: function(fileName, page, pagePerNum) {
+        let jsonArr = [];
+        if (typeof fileName === "string") {
+            jsonArr = this.getJSONDataAll(fileName);
+        }
+        else {
+            jsonArr = fileName;
+        }
+
         let jsonNum = jsonArr.length;
-        let pageNum = (pageIndex + 1) * pagePerNum;
+        if (page !== undefined && page !== "") {
+            page = parseInt(page);
+        }
+        if (pagePerNum !== undefined && pagePerNum !== "") {
+            pagePerNum = parseInt(pagePerNum);
+        }
+
+        let pageNum = page * pagePerNum;
         if (pageNum > jsonNum) {
             pageNum = jsonNum;
         }
-        const jsonPageArr = jsonArr.slice((pageIndex * pagePerNum), pageNum);
+        const jsonPageArr = jsonArr.slice((page - 1) * pagePerNum, pageNum);
         return jsonPageArr;
     },
     handleJSONDataOrder: function(jsonArr, sortField, sortType, sortOrder) {
