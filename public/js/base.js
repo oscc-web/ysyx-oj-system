@@ -375,37 +375,6 @@ function deleteTableDataFE(tableId, tableType, msg) {
     });
 }
 
-function editTableText(id, elem, msg) {
-    layui.use(["admin", "layer"], function() {
-        var $     = layui.jquery;
-        var admin = layui.admin;
-        var layer = layui.layer;
-
-        admin.open({
-            type: 2,
-            title: msg + "填写窗口",
-            content: "../tool/text_edit.html",
-            area: ["800px", "400px"],
-            offset: "auto",
-            shade: 0.5,
-            success: function(layero, index) {
-                var body = layer.getChildFrame("body", index);
-                var value = $(elem).val();
-                body.find("#textTxt").val(value);
-                admin.putTempData("textTxt", value);
-                updateTableCacheOrForm(id, "table", "cache");
-            },
-            end: function() {
-                var textTxt = admin.getTempData("textTxt");
-                console.log(textTxt);
-                if ((textTxt != undefined)) {
-                    $(elem).val(textTxt);
-                }
-            }
-        });
-    });
-}
-
 function exportCellConfigStr(value, line, data) {
     return {
         v: value,
@@ -470,7 +439,7 @@ function exportTableData(url,
         var excel = layui.excel;
         var layer = layui.layer;
 
-        var time = (new Date()).Format("YYYY-MM-DD-HH-mm-ss");
+        var time = (new Date()).Format("yyyy-MM-dd-HH-mm-ss");
         if (type == "static") {
             $.ajaxSettings.async = false;
             layer.load();
@@ -725,26 +694,6 @@ function keepDecimalForce(num, n) {
     }
 
     return resultStr;
-}
-
-function openHelpWindow(type) {
-    layui.use(["admin"], function() {
-        var admin  = layui.admin;
-
-        admin.open({
-            type: 2,
-            title: "指标解释窗口",
-            content: "../tool/pdf_view.html",
-            area: ["1000px", "500px"],
-            offset: "auto",
-            shade: 0.5,
-            maxmin: true,
-            success: function(layero, index) {
-                var iframeWin = window[layero.find("iframe")[0]["name"]];
-                iframeWin.setHelpContents(type);
-            }
-        });
-    });
 }
 
 function renderSelectFromTable(data, elem) {
