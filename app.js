@@ -13,10 +13,13 @@ const {
 const {
     verifyCookie,
     verifyUserInfo,
+    getSubmitTableData,
+    getProblemData,
     getFileInfo,
-    uploadFile,
     deleteFile,
-    getSubmitTableData
+    uploadFile,
+    judgeProblemAnswerIsRight,
+    uploadFileToServer,
 } = require("./control/control.js");
 
 const contentTypeObj = {
@@ -98,8 +101,15 @@ const server = http.createServer((req, res) => {
     else if (url === "/api/getSubmitTableData" && method === "post") {
         getSubmitTableData(req, res);
     }
-
-
+    else if (url === "/api/getProblemData" && method === "post") {
+        getProblemData(req, res);
+    }
+    else if (url === "/api/judgeProblemAnswerIsRight" && method === "post") {
+        judgeProblemAnswerIsRight(req, res);
+    }
+    else if (url === "/api/uploadFileToServer" && method === "post") {
+        uploadFileToServer(req, res);
+    }
 
 
     else if (url === "/getFileInfo" && method === "get") {
@@ -113,12 +123,6 @@ const server = http.createServer((req, res) => {
     }
     else {
         sendPage(res, path.join(rootDir, url));
-        // 下载文件
-        // let fileDir = path.join(uploadDir, url);
-        // if (!handlePage404(res, fileDir)) {
-        //     console.log("下载文件: ", fileDir);
-        //     fs.createReadStream(fileDir).pipe(res)
-        // }
     }
 });
 server.listen(port);

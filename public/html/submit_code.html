@@ -29,16 +29,12 @@
     <div class="page-loading">
         <div class="rubik-loader"></div>
     </div>
-    <form class="layui-form model-form" method="post">
+    <div class="layui-form model-form" method="post">
         <div class="layui-form-item">
             <label class="layui-form-label">题目名称：<span>*</span></label>
             <div class="layui-input-block select_option_to_layer">
-                <select id="problemName" lay-verType="tips" lay-verify="required">
+                <select id="problemName" lay-filter="problemName" lay-verType="tips" lay-verify="required">
                     <option value="">选择题目</option>
-                    <option value="001-Hello World">001-Hello World</option>
-                    <option value="002-快速排序">002-快速排序</option>
-                    <option value="003-ALU运算单元">003-ALU运算单元</option>
-                    <option value="004-RV32M单周期处理器">004-RV32M单周期处理器</option>
                 </select>
             </div>
         </div>
@@ -46,11 +42,11 @@
             <div class="layui-inline">
                 <label class="layui-form-label">代码文件：<span>*</span></label>
                 <div class="layui-input-inline">
-                    <input id="problemSrc" class="layui-input" name="problemSrc" type="text"
+                    <input id="fileName" class="layui-input" name="fileName" type="text"
                            placeholder="暂无文件" lay-verType="tips" lay-verify="required" readonly />
                 </div>
                 <div class="layui-form-mid">
-                    <button class="layui-btn layui-btn-sm" lay-filter="confirm">
+                    <button id="upload" class="layui-btn layui-btn-sm">
                         <i class="layui-icon layui-icon-ok"></i>上传
                     </button>
                 </div>
@@ -58,7 +54,7 @@
         </div>
         <div class="layui-form-item" style="margin-right:8px;">
             <div class="layui-input-block text-right">
-                <button class="layui-btn layui-btn-sm" type="submit" lay-filter="confirm" lay-submit>
+                <button id="confirm" class="layui-btn layui-btn-sm" type="submit" lay-filter="confirm" lay-submit>
                     <i class="layui-icon layui-icon-ok"></i>确定
                 </button>
                 <button class="layui-btn layui-btn-sm" type="button" ew-event="closeDialog" style="margin-left:8px;">
@@ -66,50 +62,7 @@
                 </button>
             </div>
         </div>
-    </form>
-
-    <!-- <form class="layui-form">
-        <div class="layui-fluid">
-            <div class="layui-row layui-col-space15">
-                <div class="layui-col-xs4">
-                    <label id="statisDateLabel"
-                           style="position:relative; top:10px;">匹配单位期次：
-                        <span style="color:red;">*</span>
-                    </label>
-                </div>
-                <div class="layui-col-xs4 select_option_to_layer">
-                    <select id="statisDateYear" lay-filter="statisDateYear">
-                        <option value="">选择年份</option>
-                    </select>
-                </div>
-                <div class="layui-col-xs4 select_option_to_layer">
-                    <select id="statisDateMonth" lay-filter="statisDateMonth">
-                        <option value="">选择月份</option>
-                    </select>
-                </div>
-                <div class="layui-col-xs4">
-                    <label style="position:relative; top:10px;">导入数据文件：
-                        <span style="color:red;">*</span>
-                    </label>
-                </div>
-                <div class="layui-col-xs8">
-                    <input id="fileName" class="layui-input" type="text" placeholder="导入文件名"
-                           readonly="readonly" />
-                </div>
-            </div>
-        </div>
-    </form>
-    <div class="layui-btn-group" style="position:relative; top:3px; left:221px;">
-        <button id="import" class="layui-btn layui-btn-sm" type="button">
-            <i class="layui-icon layui-icon-add-circle"></i>导入
-        </button>
-        <button id="confirm" class="layui-btn layui-btn-sm" type="submit">
-            <i class="layui-icon layui-icon-ok"></i>确定
-        </button>
-        <button id="return" class="layui-btn layui-btn-sm" type="button" ew-event="closeDialog">
-            <i class="layui-icon layui-icon-close"></i>取消
-        </button>
-    </div> -->
+    </div>
     <script type="text/javascript" src="../../framework/easyweb/assets/libs/layui/layui.js"></script>
     <script type="text/javascript" src="../../framework/easyweb/assets/js/common.js"></script>
     <script type="text/javascript" src="../../scripts/jquery-1.12.4.min.js"></script>

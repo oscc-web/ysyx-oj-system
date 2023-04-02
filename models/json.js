@@ -37,18 +37,6 @@ module.exports = {
         const jsonArr = JSON.parse(fs.readFileSync(fileName, "utf-8"));
         return jsonArr;
     },
-    getJSONDataById: function(fileName, id) {
-        const jsonArr = this.getJSONDataAll(fileName);
-        const jsonObj = jsonArr.find((v) => {
-            return v.id === id
-        });
-        if (jsonObj) {
-            return jsonObj;
-        }
-        else {
-            return false;
-        }
-    },
     getJSONDataByField: function(fileName, type, field, value) {
         const jsonArr = this.getJSONDataAll(fileName);
         let jsonArrNew = [];
@@ -75,7 +63,7 @@ module.exports = {
     },
     getJSONDataByOrder: function(fileName, sortField, sortType, sortOrder) {
         let jsonArr = [];
-        if (typeof fileName === "string") {
+        if (typeof(fileName) === "string") {
             jsonArr = this.getJSONDataAll(fileName);
         }
         else {
@@ -89,7 +77,7 @@ module.exports = {
     },
     getJSONDataByPage: function(fileName, page, pagePerNum) {
         let jsonArr = [];
-        if (typeof fileName === "string") {
+        if (typeof(fileName) === "string") {
             jsonArr = this.getJSONDataAll(fileName);
         }
         else {
@@ -97,15 +85,17 @@ module.exports = {
         }
 
         let jsonNum = jsonArr.length;
-        if (page !== undefined && page !== "") {
-            page = parseInt(page);
+        if (page === undefined || page === "") {
+            page = 0;
         }
-        if (pagePerNum !== undefined && pagePerNum !== "") {
-            pagePerNum = parseInt(pagePerNum);
+        page = parseInt(page);
+        if (pagePerNum === undefined || pagePerNum === "") {
+            pagePerNum = 0;
         }
+        pagePerNum = parseInt(pagePerNum);
 
         let pageNum = page * pagePerNum;
-        if (pageNum > jsonNum) {
+        if (pageNum === 0 || pageNum > jsonNum) {
             pageNum = jsonNum;
         }
         const jsonPageArr = jsonArr.slice((page - 1) * pagePerNum, pageNum);
@@ -116,7 +106,7 @@ module.exports = {
             let valA = objA[sortField];
             let valB = objB[sortField];
             if (sortType === "val") {
-                if (typeof(valA === String)) {
+                if (typeof(valA) === "string") {
                     valA = parseInt(valA);
                     valB = parseInt(valB);
                 }

@@ -83,7 +83,6 @@ layui.use(["admin", "element", "index", "layer"], function() {
 
     function setUserInfo() {
         userObj = admin.getTempData("userObj");
-        console.log(userObj);
         if (userObj !== undefined) {
             $("#userLoginStatus").find("span").addClass("layui-bg-blue");
             $("#userLoginStatus").find("span").text("已登录");

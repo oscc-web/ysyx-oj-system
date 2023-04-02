@@ -1,7 +1,10 @@
-const dayjs = require("dayjs");
+const { exec, execSync, spawnSync } = require("child_process");
 const fs = require("fs");
+
 const path = require("path");
+const dayjs = require("dayjs");
 const formidable = require("formidable");
+const { v4: uuidv4 } = require("uuid");
 
 const json = require("../models/json.js");
 
@@ -219,99 +222,202 @@ module.exports = {
             }
         });
     },
+    getProblemData: (req, res) => {
+        req.on("data", (data) => {
+        });
+        req.on("end", () => {
+            res.writeHead(200, {
+                "content-Type": "text/plain;charset=utf-8"
+            });
 
+            let problemArr = json.getJSONDataByOrder(
+                path.join(rootDir, "jsons/problem.json"),
+                "problemNo",
+                "val",
+                "asc");
+            console.log(problemArr);
 
-    getFileInfo: (req, res) => {
-        console.log("\n获取文件");
-
-        fs.readdir(uploadDir, (err, data) => {
-            let ret = [];
-            for (let file of data) {
-                let fileStat = fs.statSync(uploadDir + file);
-                console.log("文件名称：", file);
-                console.log("文件信息：", fileStat);
-                ret.push({
-                    src: file,
-                    size: fileStat.size,
-                    mtimeMs: new Date(fileStat.mtime).getTime()
-                });
+            if (problemArr.length > 0) {
+                res.end(JSON.stringify({
+                    msg: "success",
+                    data: problemArr
+                }));
             }
-            res.end(JSON.stringify(ret));
+            else {
+                res.end(JSON.stringify({
+                    msg: "error",
+                    data: []
+                }));
+            }
         });
     },
-    uploadFile: (req, res) => {
-        console.log("\n上传文件");
+    judgeProblemAnswerIsRight:(req, res) => {
+        let dataStr = "";
+        req.on("data", (data) => {
+            dataStr += data;
+        });
+        req.on("end", () => {
+            let dataObj = {};
+            try {
+                dataObj = JSON.parse(dataStr);
+            }
+            catch (e) {
+                console.log(e);
+            }
+            console.log(dataObj);
 
+            const fileDir = path.join(uploadDir, dataObj.userId + "/");
+            const filePath = path.join(fileDir, dataObj.fileName);
+            const fileBin = path.join(fileDir, "a.out");
+
+            const args =
+                "-O2 -Wall -Werror " +
+                "-o " + fileBin + " " +
+                filePath;
+
+            // exec("gcc " + args, (errBuild, stdoutBuild, stderrBuild) => {
+            //     console.log("编译标准输出：", stdoutBuild)
+            //     if (errBuild) {
+            //         // console.log("编译异常错误：", errBuild);
+            //         console.log("编译标准错误：", stderrBuild);
+            //     }
+            //     else {
+            //         exec(fileBin, (errExec, stdoutExec, stderrExec) => {
+            //             console.log("执行标准输出：", stdoutExec);
+            //             if (errExec) {
+            //                 // console.log("执行异常错误：", errExec);
+            //                 console.log("执行标准错误：", stderrExec);
+            //             }
+            //         });
+            //     }
+            // });
+
+            const resBuild = spawnSync("gcc", args.split(" "));
+            let stdoutBuild = resBuild.stdout.toString();
+            let stderrBuild = resBuild.stderr.toString();
+            let stdoutExec = "";
+            let stderrExec = "";
+            console.log("编译标准输出：", stdoutBuild);
+            console.log("编译错误输出：", stderrBuild);
+            if (stderrBuild === "") {
+                const resExec = spawnSync(fileBin);
+                stdoutExec = resExec.stdout.toString();
+                stderrExec = resExec.stderr.toString();
+                console.log("执行标准输出：", stdoutExec);
+                console.log("执行错误输出：", stderrExec);
+            }
+
+            let problemTestcase = "";
+            const problemArr = json.getJSONDataByField(
+                path.join(rootDir, "jsons/problem.json"),
+                "equal",
+                "id",
+                dataObj.problemId);
+            if (problemArr.length > 0) {
+                const problemObj = problemArr[0];
+                problemTestcase = problemObj.problemTestcase;
+            }
+            console.log("测试用例输出：", problemTestcase);
+            let submitStatus = "未通过";
+            let submitInfo = "";
+            if (stderrBuild === "" &&
+                stdoutExec === problemTestcase) {
+                submitStatus = "已通过";
+            }
+            console.log("判题状态输出：", submitStatus);
+            console.log();
+
+            if (stderrBuild !== "") {
+                submitInfo = stderrBuild;
+            }
+            else if (stderrExec !== "") {
+                submitInfo = stderrExec;
+            }
+
+            json.addJSONDataToBack(
+                path.join(rootDir, "jsons/submit.json"), {
+                    id: uuidv4(),
+                    userId: dataObj.userId,
+                    problemId: dataObj.problemId,
+                    submitStatus: submitStatus,
+                    submitDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+                    submitInfo: submitInfo
+                });
+
+            res.end("success");
+        });
+    },
+    uploadFileToServer: (req, res) => {
         var form = new formidable.IncomingForm();
-        form.uploadDir = uploadDir;          // 设置文件上传目录
+        form.uploadDir = uploadDir;      // 设置文件上传目录
         form.multiples = true;               // 设置多文件上传
         form.keepExtensions = true;          // 保持原有扩展名
         form.maxFileSize = 10 * 1024 * 1024; // 设置文件大小为10MB
 
         form.on("error", (err) => {
-            console.log("上传失败，文件大小超过10MB");
             res.writeHead(400, { "content-type": "text/html;charset=utf-8" });
-            res.end("上传失败，文件大小超过10MB");
+            res.end("errorMaxSize");
+            res.end(JSON.stringify({
+                code: 1,
+                msg: "errorMaxSize",
+                data: {}
+            }));
+            return;
         });
 
         form.parse(req, (err, fields, files) => {
             if (err) {
-                console.log("上传失败，表单解析错误");
                 res.writeHead(500, { "content-type": "text/html;charset=utf-8" });
-                res.end("上传失败，表单解析错误");
+                res.end(JSON.stringify({
+                    code: 1,
+                    msg: "errorAnalysis",
+                    data: {}
+                }));
                 return;
             }
 
-            if (Object.prototype.toString.call(files.uploadFile) ===
-              "[object Object]") {
-                files.uploadFile = [files.uploadFile];
+            if (Object.prototype.toString.call(files.upload) ===
+                "[object Object]") {
+                files.upload = [files.upload];
             }
 
-            let errMsg = ""
-            for (let file of files.uploadFile) {
-                var fileName = file.name;
+            var fileNameNewArr = [];
+            for (let file of files.upload) {
+                var fileNameOld = file.name;
+                console.log("文件名称: ", fileNameOld);
 
-                console.log("文件名称: ", fileName);
+                var suffix = fileNameOld.slice(fileNameOld.lastIndexOf("."));
+                var prefix = fileNameOld.slice(0, fileNameOld.lastIndexOf("."));
 
-                var suffix = fileName.slice(fileName.lastIndexOf("."));
-
-                var fileOldPath = file.path;
-                var fileNewPath = uploadDir + fileName;
-
-                if (fields.allowCoverage !== "true") {
-                    if (fs.existsSync(fileNewPath)) {
-                        fileNewPath = fileNewPath + "-" + Date.now() + suffix;
-                    }
+                var filePathOld = file.path;
+                var fileNameNew = prefix + "-" +
+                                  dayjs().format("YYYY-MM-DD-HH-mm-ss") + suffix;
+                var uploadDirNew = uploadDir;
+                fileNameNewArr.push(fileNameNew);
+                if (fields.dir !== undefined) {
+                    uploadDirNew = path.join(uploadDir, fields.dir + "/");
                 }
+                var filePathNew = uploadDirNew + fileNameNew;
 
-                fs.rename(fileOldPath, fileNewPath, function(err) {
+                fs.rename(filePathOld, filePathNew, function(err) {
                     if (err) {
-                        errMsg = "上传失败";
-                        console.log("上传失败，文件重命名异常");
+                        res.end(JSON.stringify({
+                            code: 1,
+                            msg: "errorRename",
+                            data: {}
+                        }));
+                        return;
                     }
                 });
             }
 
-            if (errMsg !== "") {
-                errMsg = "上传失败，文件重命名异常";
-            }
-            res.end(errMsg);
+            res.end(JSON.stringify({
+                code: 0,
+                msg: "success",
+                data: {
+                    fileNameNew: fileNameNewArr
+                }
+            }));
         });
-    },
-    deleteFile: (req, res) => {
-        console.log("\n删除文件");
-        let url = decodeURI(req.url);
-        let fileName = url.slice(url.indexOf("?") + 1);
-        console.log("删除文件: ", fileName)
-
-        fs.unlink(uploadDir + fileName, (err) => {
-            if (err) {
-                console.log(err);
-                res.end("删除失败：" + JSON.stringify(err));
-                return;
-            }
-            res.end();
-        });
-    },
-
+    }
 }

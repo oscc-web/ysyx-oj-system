@@ -186,7 +186,14 @@ layui.use(["admin", "form", "layer", "table"], function() {
             content: "./submit_code.html" + version,
             area: ["550px", "250px"],
             offset: "auto",
-            shade: 0.5
+            shade: 0.5,
+            end: function() {
+                var judgeFlag = admin.getTempData("judgeFlag");
+                if (judgeFlag !== undefined && judgeFlag) {
+                    admin.putTempData("judgeFlag", false);
+                    searchSubmitTable();
+                }
+            }
         });
     });
 
