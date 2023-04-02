@@ -5,7 +5,7 @@ layui.use(["admin", "form", "layer"], function() {
 
     form.on("submit(confirm)", function(data) {
         $.ajax({
-            url: "/verifyUserInfo",
+            url: "/api/verifyUserInfo",
             type: "post",
             data: JSON.stringify(data.field),
             success: function(res) {
