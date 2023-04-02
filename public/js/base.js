@@ -655,26 +655,6 @@ function initTableDate(tableView, tableId, elemDate) {
     });
 }
 
-function initPageLoading(callback) {
-    layui.use(["admin"], function() {
-        var wrapper = $(".wrapper");
-        var loading = $(".loading");
-        loading.show();
-        setTimeout(function() {
-            loading.hide();
-            wrapper.css("visibility", "visible");
-            callback();
-        }, 3000);
-    });
-}
-
-function initPageLoadingNew(flag, statisData, compIdM) {
-    layui.use(["admin", "layer"], function() {
-        var admin = layui.admin;
-        var layer = layui.layer;
-    });
-}
-
 function keepDecimal(num, n) {
     return Math.round(num * Math.pow(10, n)) / Math.pow(10, n);
 }

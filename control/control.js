@@ -6,8 +6,6 @@ const formidable = require("formidable");
 const json = require("../models/json.js");
 
 const {
-    systemUser,
-    systemPassword,
     uploadDir,
     logLoginPath,
     rootDir
@@ -198,6 +196,9 @@ module.exports = {
                     Object.assign(submitObj, submitObj, problemArr[0]);
                 }
             }
+            submitArr = json.getJSONDataByPage(submitArr,
+                                               dataObj.page,
+                                               dataObj.limit);
             console.log(submitArr);
 
             if (submitArr.length > 0) {
