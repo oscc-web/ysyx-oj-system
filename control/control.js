@@ -24,31 +24,52 @@ function getIPAddress(req) {
     return ip;
 }
 
-function splitCookieToArray(cookie) {
-    let cookieArray = [];
+function splitCookieToArr(cookie) {
+    let cookieArr = [];
     if (cookie) {
-        cookieArray = cookie.split(";");
+        cookieArr = cookie.split(";");
     }
-    return cookieArray;
+    return cookieArr;
 }
 
 function splitCookieToKeyValue(cookie) {
-    if (!cookie) return {};
-    let cookieArray = cookie.trim().split("=");
-    const cookieKey = cookieArray[0];
-    const cookieVal = cookieArray[1];
-    return {
-        cookieKey,
-        cookieVal
+    let cookieObj = {};
+    if (cookie) {
+        let cookieArr = cookie.trim().split("=");
+        const cookieKey = cookieArr[0];
+        const cookieVal = cookieArr[1];
+        cookieObj = {
+            cookieKey,
+            cookieVal
+        }
     }
+    return cookieObj;
+}
+
+function splitParamToKeyValue(param) {
+    let paramObj = {};
+    let paramArr = [];
+    if (param) {
+        paramArr = param.split("&");
+    }
+    for (let i = 0; i < paramArr.length; i++) {
+        let paramArrTemp = paramArr[i].split("=");
+        if (paramArrTemp.length == 2) {
+            const paramKey = paramArrTemp[0];
+            const paramVal = paramArrTemp[1];
+            paramObj[paramKey] = paramVal;
+        }
+    }
+
+    return paramObj;
 }
 
 module.exports = {
     verifyCookie: (cookie) => {
-        const cookieArray = splitCookieToArray(cookie);
+        const cookieArr = splitCookieToArr(cookie);
 
-        for (let index = cookieArray.length; index >= 0; index--) {
-            const item = cookieArray[index];
+        for (let index = cookieArr.length; index >= 0; index--) {
+            const item = cookieArr[index];
             const { cookieKey, cookieVal } = splitCookieToKeyValue(item);
 
             if (cookieKey === systemUser && cookieVal === systemPassword) {
@@ -63,65 +84,142 @@ module.exports = {
         console.log("登录地址：", clientIPAddress);
         logLoginWriteStream.write("登录地址：" + clientIPAddress + "\n");
 
-        let verifyStr = "";
+        let dataStr = "";
         req.on("data", (data) => {
-            verifyStr += data;
+            dataStr += data;
         });
         req.on("end", () => {
-            let verifyObj = {};
+            let dataObj = {};
             try {
-                verifyObj = JSON.parse(verifyStr);
-                console.log("验证数据：", verifyObj);
+                dataObj = JSON.parse(dataStr);
+                console.log("验证数据：", dataObj);
                 logLoginWriteStream.write("验证数据：" +
-                                          JSON.stringify(verifyObj) + "\n");
+                                          JSON.stringify(dataObj) + "\n");
             }
             catch (e) {
                 console.log(e);
             }
 
             res.writeHead(200, {
-                "Content-Type": "text/plain;charset=UTF-8"
+                "content-Type": "text/plain;charset=utf-8"
             });
 
             const loginDate = dayjs().format("YYYY-MM-DD HH:mm:ss");
             console.log("登录时间：", loginDate);
             logLoginWriteStream.write("登录时间：" + loginDate + "\n");
 
-            console.log("用户账号：", verifyObj.userAccount);
-            logLoginWriteStream.write("用户账号：" + verifyObj.userAccount + "\n");
+            console.log("用户账号：", dataObj.userAccount);
+            logLoginWriteStream.write("用户账号：" + dataObj.userAccount + "\n");
 
             let userArr = json.getJSONDataByField(
                 path.join(rootDir, "jsons/user.json"),
                 "equal",
                 "userAccount",
-                verifyObj.userAccount);
+                dataObj.userAccount);
             console.log(userArr);
 
             if (userArr.length === 1 &&
-                userArr[0].userPassword === verifyObj.userPassword) {
+                userArr[0].userPassword === dataObj.userPassword) {
                 console.log("验证成功");
                 logLoginWriteStream.write("验证成功\n\n");
 
                 // 设置Cookie过期时间为2小时
                 res.writeHead(200, {
-                    "Set-Cookie": verifyObj.userAccount + "=" +
-                                  verifyObj.userPassword + ";" +
+                    "Set-Cookie": dataObj.userAccount + "=" +
+                                  dataObj.userPassword + ";" +
                                  "path=/;expires=" +
                                   new Date(Date.now() + 1000 * 60 * 60 * 2).toGMTString()
                 });
-                res.end("success");
+                res.end(JSON.stringify({
+                    msg: "success",
+                    data: userArr[0]
+                }));
             }
             else {
-                console.log("用户密码：", verifyObj.userPassword)
-                logLoginWriteStream.write("用户密码：" + verifyObj.userPassword + "\n");
+                console.log("用户密码：", dataObj.userPassword)
+                logLoginWriteStream.write("用户密码：" + dataObj.userPassword + "\n");
 
                 console.log("验证失败\n");
                 logLoginWriteStream.write("验证失败\n\n");
 
-                res.end("error");
+                res.end(JSON.stringify({
+                    msg: "error",
+                    data: {}
+                }));
             }
         });
     },
+    getSubmitTableData: (req, res) => {
+        let dataStr = "";
+        req.on("data", (data) => {
+            dataStr += data;
+        });
+        req.on("end", () => {
+            let dataObj = {};
+            try {
+                dataObj = splitParamToKeyValue(dataStr);
+            }
+            catch (e) {
+                console.log(e);
+            }
+            console.log(dataObj);
+
+            res.writeHead(200, {
+                "content-Type": "text/plain;charset=utf-8"
+            });
+
+            let submitArr = json.getJSONDataByField(
+                path.join(rootDir, "jsons/submit.json"),
+                "equal",
+                "userId",
+                dataObj.userId);
+            submitArr = json.getJSONDataByOrder(submitArr,
+                                               "submitDate",
+                                               "date",
+                                               "desc");
+            for (let i = 0; i < submitArr.length; i++) {
+                let submitObj = submitArr[i];
+
+                let userArr = json.getJSONDataByField(
+                    path.join(rootDir, "jsons/user.json"),
+                    "equal",
+                    "id",
+                    submitObj.userId);
+                if (userArr.length > 0) {
+                    Object.assign(submitObj, submitObj, userArr[0]);
+                }
+
+                let problemArr = json.getJSONDataByField(
+                    path.join(rootDir, "jsons/problem.json"),
+                    "equal",
+                    "id",
+                    submitObj.problemId);
+                if (problemArr.length > 0) {
+                    Object.assign(submitObj, submitObj, problemArr[0]);
+                }
+            }
+            console.log(submitArr);
+
+            if (submitArr.length > 0) {
+                res.end(JSON.stringify({
+                    code: 0,
+                    msg: "获得相关数据",
+                    count: submitArr.length,
+                    data: submitArr
+                }));
+            }
+            else {
+                res.end(JSON.stringify({
+                    code: 1,
+                    msg: "暂无相关数据",
+                    count: 0,
+                    data: []
+                }));
+            }
+        });
+    },
+
+
     getFileInfo: (req, res) => {
         console.log("\n获取文件");
 
@@ -151,14 +249,14 @@ module.exports = {
 
         form.on("error", (err) => {
             console.log("上传失败，文件大小超过10MB");
-            res.writeHead(400, { "content-type": "text/html;charset=UTF-8" });
+            res.writeHead(400, { "content-type": "text/html;charset=utf-8" });
             res.end("上传失败，文件大小超过10MB");
         });
 
         form.parse(req, (err, fields, files) => {
             if (err) {
                 console.log("上传失败，表单解析错误");
-                res.writeHead(500, { "content-type": "text/html;charset=UTF-8" });
+                res.writeHead(500, { "content-type": "text/html;charset=utf-8" });
                 res.end("上传失败，表单解析错误");
                 return;
             }

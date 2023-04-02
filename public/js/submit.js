@@ -4,11 +4,13 @@ layui.use(["admin", "form", "layer", "table"], function() {
     var layer = layui.layer;
     var table = layui.table;
 
-    var submitStatus    = "all";
+    var userId          = "";
+    var userType        = "普通用户";
+    var submitStatus    = "全部";
     var searchCondition = "";
     var searchKeywords  = "";
 
-    var problemDifficultyObj = {
+    var problemDiffObj = {
         "简单": "layui-bg-green",
         "中等": "layui-bg-blue",
         "困难": "layui-bg-orange",
@@ -19,117 +21,79 @@ layui.use(["admin", "form", "layer", "table"], function() {
         "未通过": "layui-bg-red"
     }
 
+    var tableCols = [[{
+        type: "numbers",
+        fixed: "left"
+    }, {
+        field: "problemName",
+        title: "题目名称",
+        width: 300,
+        fixed: "left",
+        sort: false,
+        align: "center"
+    }, {
+        field: "problemNo",
+        title: "题目编号",
+        width: 120,
+        sort: false,
+        align: "center"
+    }, {
+        field: "problemDiff",
+        title: "题目难度",
+        width: 150,
+        sort: false,
+        align: "center"
+    }, {
+        field: "problemLang",
+        title: "编程语言",
+        width: 150,
+        sort: false,
+        align: "center"
+    }, {
+        field: "problemTags",
+        title: "题目标签",
+        width: 150,
+        sort: false,
+        align: "center"
+    }, {
+        field: "submitStatus",
+        title: "提交状态",
+        width: 150,
+        sort: false,
+        align: "center"
+    }, {
+        field: "submitDate",
+        title: "提交时间",
+        width: 160,
+        sort: false,
+        align: "center"
+    }, {
+        title: "用户操作",
+        width: 160,
+        fixed: "right",
+        sort: false,
+        align: "center",
+        templet: function(d) {
+            var buttonView =
+                "<a class='layui-btn layui-btn-xs layui-btn-normal'" +
+                   "lay-event='view'>浏览判题信息" +
+                "</a>";
+            return buttonView;
+        }
+    }]];
+
     $(document).ready(function() {
+        var userObj = admin.getTempData("userObj");
+        if (userObj !== undefined) {
+            userId = userObj.id;
+            userType = userObj.userType;
+        }
+
         table.render({
             elem: "#submitTable",
-            cols: [[{
-                type: "numbers",
-                fixed: "left"
-            }, {
-                field: "problemName",
-                title: "题目名称",
-                width: 300,
-                fixed: "left",
-                sort: false,
-                align: "center"
-            }, {
-                field: "problemNo",
-                title: "题目编号",
-                width: 120,
-                sort: false,
-                align: "center"
-            }, {
-                field: "problemDiff",
-                title: "题目难度",
-                width: 150,
-                sort: false,
-                align: "center"
-            }, {
-                field: "problemLang",
-                title: "编程语言",
-                width: 150,
-                sort: false,
-                align: "center"
-            }, {
-                field: "problemTag",
-                title: "题目标签",
-                width: 150,
-                sort: false,
-                align: "center"
-            }, {
-                field: "submitStatus",
-                title: "提交状态",
-                width: 150,
-                sort: false,
-                align: "center"
-            }, {
-                field: "submitDate",
-                title: "提交时间",
-                width: 160,
-                sort: false,
-                align: "center"
-            }, {
-                title: "用户操作",
-                width: 160,
-                fixed: "right",
-                sort: false,
-                align: "center",
-                templet: function(d) {
-                    var buttonView =
-                        "<a class='layui-btn layui-btn-xs layui-btn-normal'" +
-                           "lay-event='view'>浏览判题信息" +
-                        "</a>";
-                    return buttonView;
-                }
-            }]],
+            cols: tableCols,
             method: "post",
             height: "full-110",
-            data: [{
-                problemNo: "004",
-                problemName: "RV32M单周期处理器",
-                problemDiff: "专家",
-                problemLang: "Chisel",
-                problemTag: "体系结构",
-                submitStatus: "未通过",
-                submitDate: "2023-03-31 15:00:00",
-                submitInfo: "ERROR: XXX"
-            }, {
-                problemNo: "003",
-                problemName: "ALU运算单元",
-                problemDiff: "困难",
-                problemLang: "Verilog",
-                problemTag: "数字电路",
-                submitStatus: "未通过",
-                submitDate: "2023-03-31 14:00:00",
-                submitInfo: "ERROR: XXX"
-            }, {
-                problemNo: "002",
-                problemName: "快速排序",
-                problemDiff: "中等",
-                problemLang: "C",
-                problemTag: "程序设计",
-                submitStatus: "未通过",
-                submitDate: "2023-03-31 13:00:00",
-                submitInfo: "ERROR: XXX"
-            }, {
-                problemNo: "001",
-                problemName: "Hello World",
-                problemDiff: "简单",
-                problemLang: "C",
-                problemTag: "程序设计",
-                submitStatus: "已通过",
-                submitDate: "2023-03-31 12:00:00",
-                submitInfo: "PASS: XXX"
-            }, {
-                problemNo: "001",
-                problemName: "Hello World",
-                problemDiff: "简单",
-                problemLang: "C",
-                problemTag: "程序设计",
-                submitStatus: "未通过",
-                submitDate: "2023-03-31 11:00:00",
-                submitInfo: "ERROR: XXX"
-            }],
             done: function(res, curr, count) {
                 var selectorPrefix =
                     "div[lay-id='submitTable'] .layui-table-main ";
@@ -141,7 +105,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
                         "td[data-field='problemDiff'] .layui-table-cell";
                     $(selectorContent).html(
                         '<span class="layui-badge ' +
-                            problemDifficultyObj[problemDiff] + '">' +
+                            problemDiffObj[problemDiff] + '">' +
                             problemDiff +
                         '</span>');
 
@@ -163,15 +127,15 @@ layui.use(["admin", "form", "layer", "table"], function() {
             }
         });
 
-        // searchSubmitTable();
+        searchSubmitTable();
     });
 
     function searchSubmitTable() {
         table.reload("submitTable", {
-            url: "executeUser_getUserInfoData",
+            url: "/api/getSubmitTableData",
             where: {
-                userType: "user",
-                userCreateDate: userCreateDate,
+                userId: userId,
+                userType: userType,
                 submitStatus: submitStatus,
                 searchCondition: searchCondition,
                 searchKeywords: searchKeywords
@@ -226,51 +190,46 @@ layui.use(["admin", "form", "layer", "table"], function() {
         });
     });
 
-    // $("#export").click(function() {
-    //     exportTableData("executeUser_getUserInfoData", {
-    //     }, {
-    //         userAccount: "用户账号",
-    //         userPassword: "用户密码",
-    //         userCompName: "单位名称",
-    //         userName: "用户姓名",
-    //         userIdCard: "用户身份证号",
-    //         userIdentity: "用户身份",
-    //         userAuthority: "用户权限",
-    //         userDirection: "用户业务方向",
-    //         submitStatus: "用户激活状态",
-    //         userHostIp: "用户主机地址",
-    //         userCreateDate: "用户创建日期",
-    //         userLockStatus: "用户锁定状态",
-    //         userDataOrigin: "用户数据来源"
-    //     }, [
-    //     ], [
-    //     ], {
-    //     }, {
-    //         "A": 120,
-    //         "B": 120,
-    //         "C": 350,
-    //         "D": 120,
-    //         "E": 150,
-    //         "F": 120,
-    //         "G": 120,
-    //         "H": 120,
-    //         "I": 120,
-    //         "J": 120,
-    //         "K": 150,
-    //         "L": 120,
-    //         "M": 120,
-    //     }, {
-    //     },
-    //     "用户注册信息",
-    //     "static",
-    //     [],
-    //     "",
-    //     "",
-    //     "",
-    //     "",
-    //     "",
-    //     "");
-    // });
+    $("#export").click(function() {
+        exportTableData("/api/getSubmitTableData", {
+            userId: userId,
+            userType: userType,
+            submitStatus: submitStatus,
+            searchCondition: searchCondition,
+            searchKeywords: searchKeywords
+        }, {
+            problemName: "题目名称",
+            problemNo: "题目编号",
+            problemDiff: "题目难度",
+            problemLang: "编程语言",
+            problemTags: "题目标签",
+            userName: "用户姓名",
+            submitStatus: "提交状态",
+            submitDate: "提交时间",
+        }, [
+        ], [
+        ], {
+        }, {
+            "A": 250,
+            "B": 120,
+            "C": 120,
+            "D": 120,
+            "E": 120,
+            "F": 120,
+            "G": 120,
+            "H": 120,
+        }, {
+        },
+        "提交报告信息",
+        "static",
+        [],
+        "",
+        "",
+        "",
+        "",
+        "",
+        "");
+    });
 
     form.on("select(submitStatus)", function(data) {
         submitStatus = data.value;

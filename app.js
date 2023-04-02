@@ -15,7 +15,8 @@ const {
     verifyUserInfo,
     getFileInfo,
     uploadFile,
-    deleteFile
+    deleteFile,
+    getSubmitTableData
 } = require("./control/control.js");
 
 const contentTypeObj = {
@@ -25,7 +26,7 @@ const contentTypeObj = {
     "css":  "text/css",
     "html": "text/html;charset=utf-8",
     "js":   "text/javascript",
-    "txt":  "text/plain",
+    "txt":  "text/plain;charset=utf-8",
     "gif":  "image/gif",
     "jpg":  "image/jpg",
     "png":  "image/png"
@@ -59,7 +60,7 @@ function handlePage404(res, fileDir) {
     return false
 }
 
-var server = http.createServer(function(req, res) {
+const server = http.createServer((req, res) => {
     let url = decodeURI(req.url);
     let method = req.method.toLowerCase()
     console.log("接口地址：", url);
@@ -91,9 +92,11 @@ var server = http.createServer(function(req, res) {
     if (url === "/" && method === "get") {
         sendPage(res, "./public/index.html");
     }
-    if (url === "/verifyUserInfo" && method === "post") {
+    if (url === "/api/verifyUserInfo" && method === "post") {
         verifyUserInfo(req, res)
-        return;
+    }
+    else if (url === "/api/getSubmitTableData" && method === "post") {
+        getSubmitTableData(req, res);
     }
 
 

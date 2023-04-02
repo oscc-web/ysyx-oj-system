@@ -74,7 +74,13 @@ module.exports = {
         }
     },
     getJSONDataByOrder: function(fileName, sortField, sortType, sortOrder) {
-        let jsonArr = this.getJSONDataAll(fileName);
+        let jsonArr = [];
+        if (typeof fileName === "string") {
+            jsonArr = this.getJSONDataAll(fileName);
+        }
+        else {
+            jsonArr = fileName;
+        }
         return this.handleJSONDataOrder(jsonArr,
                                         sortField,
                                         sortType,
