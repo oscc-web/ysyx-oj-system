@@ -89,6 +89,23 @@ layui.use(["admin", "form", "layer", "table"], function() {
             userType = userObj.userType;
         }
 
+        if (userType === "管理员") {
+            $("#import").attr("disabled", true);
+            $("#import").addClass("layui-btn-disabled");
+
+            tableCols[0].splice(6, 0, {
+                field: "userName",
+                title: "用户姓名",
+                width: 150,
+                sort: false,
+                align: "center"
+            });
+        }
+        else {
+            $("#import").attr("disabled", false);
+            $("#import").removeClass("layui-btn-disabled");
+        }
+
         table.render({
             elem: "#submitTable",
             cols: tableCols,

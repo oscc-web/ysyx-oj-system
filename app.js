@@ -7,19 +7,15 @@ const {
     rootDir,
     uploadDir,
     logDir,
-    logLoginPath,
+    logLoginPath
 } = require("./config/config.js");
 
 const {
-    verifyCookie,
-    verifyUserInfo,
-    getSubmitTableData,
     getProblemData,
-    getFileInfo,
-    deleteFile,
-    uploadFile,
+    getSubmitTableData,
     judgeProblemAnswerIsRight,
     uploadFileToServer,
+    verifyUserInfo
 } = require("./control/control.js");
 
 const contentTypeObj = {
@@ -83,15 +79,6 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // if (url === "/verifyUserInfo" && method === "post") {
-    //     verifyUserInfo(req, res)
-    //     return;
-    // }
-    // if (!verifyCookie(req.headers.cookie)) {
-    //     sendPage(res, "./public/verify.html", 400);
-    //     return;
-    // }
-
     if (url === "/" && method === "get") {
         sendPage(res, "./public/index.html");
     }
@@ -109,17 +96,6 @@ const server = http.createServer((req, res) => {
     }
     else if (url === "/api/uploadFileToServer" && method === "post") {
         uploadFileToServer(req, res);
-    }
-
-
-    else if (url === "/getFileInfo" && method === "get") {
-        getFileInfo(req, res);
-    }
-    else if (url === "/uploadFile" && method === "post") {
-        uploadFile(req, res);
-    }
-    else if (/^\/deleteFile?/.test(url) && method === "get") {
-        deleteFile(req, res);
     }
     else {
         sendPage(res, path.join(rootDir, url));

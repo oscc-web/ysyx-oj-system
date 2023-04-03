@@ -66,86 +66,31 @@ function splitParamToKeyValue(param) {
 }
 
 module.exports = {
-    verifyCookie: (cookie) => {
-        const cookieArr = splitCookieToArr(cookie);
-
-        for (let index = cookieArr.length; index >= 0; index--) {
-            const item = cookieArr[index];
-            const { cookieKey, cookieVal } = splitCookieToKeyValue(item);
-
-            if (cookieKey === systemUser && cookieVal === systemPassword) {
-                return true;
-            }
-        }
-
-        return false;
-    },
-    verifyUserInfo: (req, res) => {
-        let clientIPAddress = getIPAddress(req);
-        console.log("登录地址：", clientIPAddress);
-        logLoginWriteStream.write("登录地址：" + clientIPAddress + "\n");
-
-        let dataStr = "";
+    getProblemData: (req, res) => {
         req.on("data", (data) => {
-            dataStr += data;
         });
         req.on("end", () => {
-            let dataObj = {};
-            try {
-                dataObj = JSON.parse(dataStr);
-                console.log("验证数据：", dataObj);
-                logLoginWriteStream.write("验证数据：" +
-                                          JSON.stringify(dataObj) + "\n");
-            }
-            catch (e) {
-                console.log(e);
-            }
-
             res.writeHead(200, {
                 "content-Type": "text/plain;charset=utf-8"
             });
 
-            const loginDate = dayjs().format("YYYY-MM-DD HH:mm:ss");
-            console.log("登录时间：", loginDate);
-            logLoginWriteStream.write("登录时间：" + loginDate + "\n");
+            let problemArr = json.getJSONDataByOrder(
+                path.join(rootDir, "jsons/problem.json"),
+                "problemNo",
+                "val",
+                "asc");
+            console.log(problemArr);
 
-            console.log("用户账号：", dataObj.userAccount);
-            logLoginWriteStream.write("用户账号：" + dataObj.userAccount + "\n");
-
-            let userArr = json.getJSONDataByField(
-                path.join(rootDir, "jsons/user.json"),
-                "equal",
-                "userAccount",
-                dataObj.userAccount);
-            console.log(userArr);
-
-            if (userArr.length === 1 &&
-                userArr[0].userPassword === dataObj.userPassword) {
-                console.log("验证成功");
-                logLoginWriteStream.write("验证成功\n\n");
-
-                // 设置Cookie过期时间为2小时
-                res.writeHead(200, {
-                    "Set-Cookie": dataObj.userAccount + "=" +
-                                  dataObj.userPassword + ";" +
-                                 "path=/;expires=" +
-                                  new Date(Date.now() + 1000 * 60 * 60 * 2).toGMTString()
-                });
+            if (problemArr.length > 0) {
                 res.end(JSON.stringify({
                     msg: "success",
-                    data: userArr[0]
+                    data: problemArr
                 }));
             }
             else {
-                console.log("用户密码：", dataObj.userPassword)
-                logLoginWriteStream.write("用户密码：" + dataObj.userPassword + "\n");
-
-                console.log("验证失败\n");
-                logLoginWriteStream.write("验证失败\n\n");
-
                 res.end(JSON.stringify({
                     msg: "error",
-                    data: {}
+                    data: []
                 }));
             }
         });
@@ -169,11 +114,19 @@ module.exports = {
                 "content-Type": "text/plain;charset=utf-8"
             });
 
-            let submitArr = json.getJSONDataByField(
-                path.join(rootDir, "jsons/submit.json"),
-                "equal",
-                "userId",
-                dataObj.userId);
+            let submitArr = [];
+            if (dataObj.userType === "管理员") {
+                submitArr = json.getJSONDataByField(
+                    path.join(rootDir, "jsons/submit.json"),
+                    "equal",
+                    "userId",
+                    dataObj.userId);
+            }
+            else {
+                submitArr = json.getJSONDataAll(
+                    path.join(rootDir, "jsons/submit.json"));
+            }
+
             submitArr = json.getJSONDataByOrder(submitArr,
                                                "submitDate",
                                                "date",
@@ -217,35 +170,6 @@ module.exports = {
                     code: 1,
                     msg: "暂无相关数据",
                     count: 0,
-                    data: []
-                }));
-            }
-        });
-    },
-    getProblemData: (req, res) => {
-        req.on("data", (data) => {
-        });
-        req.on("end", () => {
-            res.writeHead(200, {
-                "content-Type": "text/plain;charset=utf-8"
-            });
-
-            let problemArr = json.getJSONDataByOrder(
-                path.join(rootDir, "jsons/problem.json"),
-                "problemNo",
-                "val",
-                "asc");
-            console.log(problemArr);
-
-            if (problemArr.length > 0) {
-                res.end(JSON.stringify({
-                    msg: "success",
-                    data: problemArr
-                }));
-            }
-            else {
-                res.end(JSON.stringify({
-                    msg: "error",
                     data: []
                 }));
             }
@@ -348,7 +272,7 @@ module.exports = {
         });
     },
     uploadFileToServer: (req, res) => {
-        var form = new formidable.IncomingForm();
+        let form = new formidable.IncomingForm();
         form.uploadDir = uploadDir;      // 设置文件上传目录
         form.multiples = true;               // 设置多文件上传
         form.keepExtensions = true;          // 保持原有扩展名
@@ -381,23 +305,23 @@ module.exports = {
                 files.upload = [files.upload];
             }
 
-            var fileNameNewArr = [];
+            let fileNameNewArr = [];
             for (let file of files.upload) {
-                var fileNameOld = file.name;
+                let fileNameOld = file.name;
                 console.log("文件名称: ", fileNameOld);
 
-                var suffix = fileNameOld.slice(fileNameOld.lastIndexOf("."));
-                var prefix = fileNameOld.slice(0, fileNameOld.lastIndexOf("."));
+                let suffix = fileNameOld.slice(fileNameOld.lastIndexOf("."));
+                let prefix = fileNameOld.slice(0, fileNameOld.lastIndexOf("."));
 
-                var filePathOld = file.path;
-                var fileNameNew = prefix + "-" +
+                let filePathOld = file.path;
+                let fileNameNew = prefix + "-" +
                                   dayjs().format("YYYY-MM-DD-HH-mm-ss") + suffix;
-                var uploadDirNew = uploadDir;
+                let uploadDirNew = uploadDir;
                 fileNameNewArr.push(fileNameNew);
                 if (fields.dir !== undefined) {
                     uploadDirNew = path.join(uploadDir, fields.dir + "/");
                 }
-                var filePathNew = uploadDirNew + fileNameNew;
+                let filePathNew = uploadDirNew + fileNameNew;
 
                 fs.rename(filePathOld, filePathNew, function(err) {
                     if (err) {
@@ -418,6 +342,90 @@ module.exports = {
                     fileNameNew: fileNameNewArr
                 }
             }));
+        });
+    },
+    verifyCookie: (cookie) => {
+        const cookieArr = splitCookieToArr(cookie);
+
+        for (let index = cookieArr.length; index >= 0; index--) {
+            const item = cookieArr[index];
+            const { cookieKey, cookieVal } = splitCookieToKeyValue(item);
+
+            if (cookieKey === systemUser && cookieVal === systemPassword) {
+                return true;
+            }
+        }
+
+        return false;
+    },
+    verifyUserInfo: (req, res) => {
+        let clientIPAddress = getIPAddress(req);
+        console.log("登录地址：", clientIPAddress);
+        logLoginWriteStream.write("登录地址：" + clientIPAddress + "\n");
+
+        let dataStr = "";
+        req.on("data", (data) => {
+            dataStr += data;
+        });
+        req.on("end", () => {
+            let dataObj = {};
+            try {
+                dataObj = JSON.parse(dataStr);
+                console.log("验证数据：", dataObj);
+                logLoginWriteStream.write("验证数据：" +
+                                          JSON.stringify(dataObj) + "\n");
+            }
+            catch (e) {
+                console.log(e);
+            }
+
+            res.writeHead(200, {
+                "content-Type": "text/plain;charset=utf-8"
+            });
+
+            const loginDate = dayjs().format("YYYY-MM-DD HH:mm:ss");
+            console.log("登录时间：", loginDate);
+            logLoginWriteStream.write("登录时间：" + loginDate + "\n");
+
+            console.log("用户账号：", dataObj.userAccount);
+            logLoginWriteStream.write("用户账号：" + dataObj.userAccount + "\n");
+
+            let userArr = json.getJSONDataByField(
+                path.join(rootDir, "jsons/user.json"),
+                "equal",
+                "userAccount",
+                dataObj.userAccount);
+            console.log(userArr);
+
+            if (userArr.length === 1 &&
+                userArr[0].userPassword === dataObj.userPassword) {
+                console.log("验证成功");
+                logLoginWriteStream.write("验证成功\n\n");
+
+                // 设置Cookie过期时间为2小时
+                res.writeHead(200, {
+                    "Set-Cookie": dataObj.userAccount + "=" +
+                                  dataObj.userPassword + ";" +
+                                 "path=/;expires=" +
+                                  new Date(Date.now() + 1000 * 60 * 60 * 2).toGMTString()
+                });
+                res.end(JSON.stringify({
+                    msg: "success",
+                    data: userArr[0]
+                }));
+            }
+            else {
+                console.log("用户密码：", dataObj.userPassword)
+                logLoginWriteStream.write("用户密码：" + dataObj.userPassword + "\n");
+
+                console.log("验证失败\n");
+                logLoginWriteStream.write("验证失败\n\n");
+
+                res.end(JSON.stringify({
+                    msg: "error",
+                    data: {}
+                }));
+            }
         });
     }
 }
