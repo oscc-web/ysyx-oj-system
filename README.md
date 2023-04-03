@@ -34,7 +34,7 @@
 
 <p align="center">
     <span>预览：</span>
-    <a target="_blank" href="./">一生一芯在线评测系统网站</a>
+    <a target="_blank" href="https://github.com/myyerrol/ysyx-oj-system">一生一芯在线评测系统网站</a>
 </p>
 
 ## 特性
