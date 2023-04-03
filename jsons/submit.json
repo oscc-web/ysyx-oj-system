@@ -5,7 +5,7 @@
         "problemId": "febcebaa-bdfe-b576-abd3-ed75bd7e5c9e",
         "submitStatus": "未通过",
         "submitDate": "2023-03-31 11:00:00",
-        "submitInfo": "ERROR: XXX"
+        "submitInfo": ""
     },
     {
         "id": "adf2ef36-5a7d-ac5a-a671-05c8ef5c03ea",
@@ -13,7 +13,7 @@
         "problemId": "febcebaa-bdfe-b576-abd3-ed75bd7e5c9e",
         "submitStatus": "已通过",
         "submitDate": "2023-03-31 12:00:00",
-        "submitInfo": "PASS: XXX"
+        "submitInfo": ""
     },
     {
         "id": "590dd975-2d0b-6095-537e-b75523144183",
@@ -21,7 +21,7 @@
         "problemId": "4a1da82a-99d9-0919-ddea-a0b6d64e6f5f",
         "submitStatus": "未通过",
         "submitDate": "2023-03-31 13:00:00",
-        "submitInfo": "ERROR: XXX"
+        "submitInfo": ""
     },
     {
         "id": "409cc601-d7e3-51e1-2eb4-37a15a8598b7",
@@ -29,7 +29,7 @@
         "problemId": "81b1f931-2d3c-be76-24c0-97fbac7f4d3e",
         "submitStatus": "未通过",
         "submitDate": "2023-03-31 14:00:00",
-        "submitInfo": "ERROR: XXX"
+        "submitInfo": ""
     },
     {
         "id": "1b900798-05f5-fe0e-6b0c-464fec8f180b",
@@ -37,6 +37,22 @@
         "problemId": "578a78c2-6738-ec8b-9ad4-8aaa4e034c8d",
         "submitStatus": "未通过",
         "submitDate": "2023-03-31 15:00:00",
-        "submitInfo": "ERROR: XXX"
+        "submitInfo": ""
+    },
+    {
+        "id": "3b1fea18-c45e-4608-9ff9-3a6014e1c47f",
+        "userId": "d57cb844-b2f3-885c-e9d5-9bdf37444f88",
+        "problemId": "febcebaa-bdfe-b576-abd3-ed75bd7e5c9e",
+        "submitStatus": "未通过",
+        "submitDate": "2023-04-02 16:26:29",
+        "submitInfo": "/home/myyerrol/Workspaces/ysyx-oj-system/uploads/d57cb844-b2f3-885c-e9d5-9bdf37444f88/hello_world.c: In function ‘main’:\n/home/myyerrol/Workspaces/ysyx-oj-system/uploads/d57cb844-b2f3-885c-e9d5-9bdf37444f88/hello_world.c:4:27: error: expected ‘;’ before ‘return’\n    4 |     printf(\"Hello World!\")\n      |                           ^\n      |                           ;\n    5 |     return 0;\n      |     ~~~~~~                 \n"
+    },
+    {
+        "id": "3c7a839e-1483-4902-ba74-059665661948",
+        "userId": "d57cb844-b2f3-885c-e9d5-9bdf37444f88",
+        "problemId": "febcebaa-bdfe-b576-abd3-ed75bd7e5c9e",
+        "submitStatus": "已通过",
+        "submitDate": "2023-04-02 16:29:11",
+        "submitInfo": ""
     }
 ]

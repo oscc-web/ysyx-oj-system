@@ -4,13 +4,23 @@
         "userName": "管理员",
         "userAccount": "root",
         "userPassword": "root",
-        "userType": "管理员"
+        "userType": "管理员",
+        "userDate": "2023-03-30 10:00:00"
     },
     {
         "id": "d57cb844-b2f3-885c-e9d5-9bdf37444f88",
         "userName": "张三",
         "userAccount": "zhangsan",
         "userPassword": "123456",
-        "userType": "普通用户"
+        "userType": "普通用户",
+        "userDate": "2023-03-30 10:01:00"
+    },
+    {
+        "id": "d57cb844-b2f3-885c-e9d5-9bdf37444f89",
+        "userName": "李四",
+        "userAccount": "lisi",
+        "userPassword": "123456",
+        "userType": "普通用户",
+        "userDate": "2023-04-03 09:00:00"
     }
 ]
