@@ -5,22 +5,21 @@ layui.use(["admin", "element", "index", "layer"], function() {
 
     index.loadSetting();
 
-    var title   = "主页";
+    var tabTitle   = "主页";
     var userObj = {};
+    var tabUrlSubmit = "";
 
     $(document).ready(function() {
         setUserInfo();
         index.openTab({
             title: "主页",
-            url: "../public/html/home.html" + version,
-            end: function() {
-            }
+            url: "../public/html/home.html" + version
         });
     });
 
     $(".layui-layout-left li").click(function() {
-        title = $(this).find("a").text();
-        if (title === "提交") {
+        tabTitle = $(this).find("a").text();
+        if (tabTitle === "提交") {
             if (userObj === undefined) {
                 layer.msg("请先登录系统，再上传代码！", {
                     time: 1000
@@ -31,11 +30,13 @@ layui.use(["admin", "element", "index", "layer"], function() {
             }
         }
 
+        tabUrl = $(this).find("a").attr("lay-href") + version;
+        if (tabTitle === "提交") {
+            tabUrlSubmit = tabUrl;
+        }
         index.openTab({
-            title: title,
-            url: $(this).find("a").attr("lay-href") + version,
-            end: function() {
-            }
+            title: tabTitle,
+            url: tabUrl
         });
     });
 
@@ -52,7 +53,7 @@ layui.use(["admin", "element", "index", "layer"], function() {
             }, function() {
                 admin.putTempData("userObj", undefined);
                 setUserInfo();
-                if (title === "提交") {
+                if (tabTitle === "提交") {
                     $(".layui-layout-left .layui-nav-item").removeClass(
                         "layui-this");
                     $(".layui-layout-left .layui-nav-item").eq(0).addClass(
@@ -98,6 +99,7 @@ layui.use(["admin", "element", "index", "layer"], function() {
             $("#userType").find("span").text("暂无");
             $("#login").show();
             $("#logout").hide();
+            index.closeTab(tabUrlSubmit);
         }
     }
 });
