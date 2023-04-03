@@ -51,30 +51,31 @@
 - `formidable`版本 >= 1.2.1
 - `uuid`版本 >= 9.0.0
 
-## 安装
+## 使用
 
-### 下载
+### 下载源码
 
   ```sh
   $> cd your-workspaces
   $> git clone git@github.com:myyerrol/ysyx-oj-system.git
   ```
 
+### 安装依赖
   ```sh
   $> npm install
   ```
 
-### 配置
+### 配置端口
 
 根据本地开发机或远程服务器的端口占用情况，酌情修改`config/config.js`文件中`port`属性，确保与已启动服务端口不冲突即可，默认值是`5050`。
 
-### 运行
+### 运行系统
 
   ```sh
   $> npm run serve
   ```
 
-### 更新
+### 更新源码
 
 ```sh
 $> cd your-workspaces/ysyx-oj-system
