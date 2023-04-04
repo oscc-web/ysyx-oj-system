@@ -65,6 +65,199 @@ function splitParamToKeyValue(param) {
     return paramObj;
 }
 
+function judgeProblem(req, res) {
+    let dataStr = "";
+    req.on("data", (data) => {
+        dataStr += data;
+    });
+    req.on("end", () => {
+        let dataObj = {};
+        try {
+            dataObj = JSON.parse(dataStr);
+        }
+        catch (e) {
+            console.log(e);
+        }
+        console.log(dataObj);
+
+        const fileDir = path.join(uploadDir, dataObj.userId + "/");
+        const filePath = path.join(fileDir, dataObj.fileName);
+        const fileBin = path.join(fileDir, "a.out");
+
+        const args =
+            "-O2 -Wall -Werror " +
+            "-o " + fileBin + " " +
+            filePath;
+
+        // exec("gcc " + args, (errBuild, stdoutBuild, stderrBuild) => {
+        //     console.log("编译标准输出：", stdoutBuild)
+        //     if (errBuild) {
+        //         // console.log("编译异常错误：", errBuild);
+        //         console.log("编译标准错误：", stderrBuild);
+        //     }
+        //     else {
+        //         exec(fileBin, (errExec, stdoutExec, stderrExec) => {
+        //             console.log("执行标准输出：", stdoutExec);
+        //             if (errExec) {
+        //                 // console.log("执行异常错误：", errExec);
+        //                 console.log("执行标准错误：", stderrExec);
+        //             }
+        //         });
+        //     }
+        // });
+
+        const resBuild = spawnSync("gcc", args.split(" "));
+        let stdoutBuild = resBuild.stdout.toString();
+        let stderrBuild = resBuild.stderr.toString();
+        let stdoutExec = "";
+        let stderrExec = "";
+        console.log("编译标准输出：", stdoutBuild);
+        console.log("编译错误输出：", stderrBuild);
+        if (stderrBuild === "") {
+            const resExec = spawnSync(fileBin);
+            stdoutExec = resExec.stdout.toString();
+            stderrExec = resExec.stderr.toString();
+            console.log("执行标准输出：", stdoutExec);
+            console.log("执行错误输出：", stderrExec);
+        }
+
+        let problemTestcase = "";
+        const problemArr = json.getJSONDataByField(
+            path.join(rootDir, "jsons/problem.json"),
+            "equal",
+            "id",
+            dataObj.problemId);
+        if (problemArr.length > 0) {
+            const problemObj = problemArr[0];
+            problemTestcase = problemObj.problemTestcase;
+        }
+        console.log("测试用例输出：", problemTestcase);
+        let submitStatus = "未通过";
+        let submitInfo = "";
+        if (stderrBuild === "" &&
+            stdoutExec === problemTestcase) {
+            submitStatus = "已通过";
+        }
+        console.log("判题状态输出：", submitStatus);
+        console.log();
+
+        if (stderrBuild !== "") {
+            submitInfo = stderrBuild;
+        }
+        else if (stderrExec !== "") {
+            submitInfo = stderrExec;
+        }
+
+        json.addJSONDataToBack(
+            path.join(rootDir, "jsons/submit.json"), {
+                id: uuidv4(),
+                userId: dataObj.userId,
+                problemId: dataObj.problemId,
+                submitStatus: submitStatus,
+                submitDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+                submitInfo: submitInfo
+            });
+
+        res.end("success");
+    });
+}
+
+function uploadFile(req, res, type, maxFileSize) {
+    let form = new formidable.IncomingForm();
+    form.uploadDir = uploadDir;                   // 设置文件上传目录
+    form.multiples = true;                        // 设置多文件上传
+    form.keepExtensions = true;                   // 保持原有扩展名
+    form.maxFileSize = maxFileSize * 1024 * 1024; // 设置最大文件大小（MB）
+
+    form.on("error", (err) => {
+        res.writeHead(400, { "content-type": "text/html;charset=utf-8" });
+        res.end("errorMaxSize");
+        res.end(JSON.stringify({
+            code: 1,
+            msg: "errorMaxSize",
+            data: {}
+        }));
+        return;
+    });
+
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            res.writeHead(500, { "content-type": "text/html;charset=utf-8" });
+            res.end(JSON.stringify({
+                code: 1,
+                msg: "errorAnalysis",
+                data: {}
+            }));
+            return;
+        }
+
+        let file = files.upload;
+        let fileNameOld = file.name;
+        console.log("文件名称: ", fileNameOld);
+
+        // 移动到新路径
+        let suffix = fileNameOld.slice(fileNameOld.lastIndexOf("."));
+        let prefix = fileNameOld.slice(0, fileNameOld.lastIndexOf("."));
+
+        let filePathOld = file.path;
+        let fileNameNew = prefix + "-" +
+                            dayjs().format("YYYY-MM-DD-HH-mm-ss") + suffix;
+        let uploadDirNew = uploadDir;
+
+        if (fields.token !== undefined) {
+            uploadDirNew = path.join(uploadDir, fields.token + "/");
+        }
+        let filePathNew = uploadDirNew + fileNameNew;
+
+        console.log("历史路径：", filePathOld);
+        console.log("最新路径：", filePathNew);
+
+        if (!fs.existsSync(uploadDirNew)) {
+            fs.mkdirSync(uploadDirNew);
+        }
+        fs.renameSync(filePathOld, filePathNew);
+
+        // 解压缩文件
+        const extractDir = path.join(uploadDirNew, "extract/");
+        if (!fs.existsSync(extractDir)) {
+            fs.mkdirSync(extractDir);
+        }
+        else {
+            fs.rmSync(extractDir, {
+                recursive: true,
+                force: true
+            });
+            fs.mkdirSync(extractDir);
+        }
+        const resExtract = spawnSync(
+            "tar",
+            ["-x", "-f", filePathNew, "-C", extractDir]);
+        let stdoutExtract = resExtract.stdout.toString();
+        let stderrExtract = resExtract.stderr.toString();
+        console.log("解压标准输出：", stdoutExtract);
+        console.log("解压错误输出：", stderrExtract);
+
+        if (type === "online") {
+            res.end(JSON.stringify({
+                code: 0,
+                msg: "success",
+                data: {
+                    fileNameNew: fileNameNew
+                }
+            }));
+        }
+        else if (type === "script") {
+            res.end(JSON.stringify({
+                code: 0,
+                msg: "success",
+                data: {
+                    fileNameNew: fileNameNew
+                }
+            }));
+        }
+    });
+}
+
 module.exports = {
     getProblemData: (req, res) => {
         req.on("data", (data) => {
@@ -175,174 +368,108 @@ module.exports = {
             }
         });
     },
-    judgeProblemAnswerIsRight:(req, res) => {
-        let dataStr = "";
-        req.on("data", (data) => {
-            dataStr += data;
-        });
-        req.on("end", () => {
-            let dataObj = {};
-            try {
-                dataObj = JSON.parse(dataStr);
-            }
-            catch (e) {
-                console.log(e);
-            }
-            console.log(dataObj);
+    judgeProblem:(req, res) => {
+        judgeProblem(req, res);
+        // let dataStr = "";
+        // req.on("data", (data) => {
+        //     dataStr += data;
+        // });
+        // req.on("end", () => {
+        //     let dataObj = {};
+        //     try {
+        //         dataObj = JSON.parse(dataStr);
+        //     }
+        //     catch (e) {
+        //         console.log(e);
+        //     }
+        //     console.log(dataObj);
 
-            const fileDir = path.join(uploadDir, dataObj.userId + "/");
-            const filePath = path.join(fileDir, dataObj.fileName);
-            const fileBin = path.join(fileDir, "a.out");
+        //     const fileDir = path.join(uploadDir, dataObj.userId + "/");
+        //     const filePath = path.join(fileDir, dataObj.fileName);
+        //     const fileBin = path.join(fileDir, "a.out");
 
-            const args =
-                "-O2 -Wall -Werror " +
-                "-o " + fileBin + " " +
-                filePath;
+        //     const args =
+        //         "-O2 -Wall -Werror " +
+        //         "-o " + fileBin + " " +
+        //         filePath;
 
-            // exec("gcc " + args, (errBuild, stdoutBuild, stderrBuild) => {
-            //     console.log("编译标准输出：", stdoutBuild)
-            //     if (errBuild) {
-            //         // console.log("编译异常错误：", errBuild);
-            //         console.log("编译标准错误：", stderrBuild);
-            //     }
-            //     else {
-            //         exec(fileBin, (errExec, stdoutExec, stderrExec) => {
-            //             console.log("执行标准输出：", stdoutExec);
-            //             if (errExec) {
-            //                 // console.log("执行异常错误：", errExec);
-            //                 console.log("执行标准错误：", stderrExec);
-            //             }
-            //         });
-            //     }
-            // });
+        //     // exec("gcc " + args, (errBuild, stdoutBuild, stderrBuild) => {
+        //     //     console.log("编译标准输出：", stdoutBuild)
+        //     //     if (errBuild) {
+        //     //         // console.log("编译异常错误：", errBuild);
+        //     //         console.log("编译标准错误：", stderrBuild);
+        //     //     }
+        //     //     else {
+        //     //         exec(fileBin, (errExec, stdoutExec, stderrExec) => {
+        //     //             console.log("执行标准输出：", stdoutExec);
+        //     //             if (errExec) {
+        //     //                 // console.log("执行异常错误：", errExec);
+        //     //                 console.log("执行标准错误：", stderrExec);
+        //     //             }
+        //     //         });
+        //     //     }
+        //     // });
 
-            const resBuild = spawnSync("gcc", args.split(" "));
-            let stdoutBuild = resBuild.stdout.toString();
-            let stderrBuild = resBuild.stderr.toString();
-            let stdoutExec = "";
-            let stderrExec = "";
-            console.log("编译标准输出：", stdoutBuild);
-            console.log("编译错误输出：", stderrBuild);
-            if (stderrBuild === "") {
-                const resExec = spawnSync(fileBin);
-                stdoutExec = resExec.stdout.toString();
-                stderrExec = resExec.stderr.toString();
-                console.log("执行标准输出：", stdoutExec);
-                console.log("执行错误输出：", stderrExec);
-            }
+        //     const resBuild = spawnSync("gcc", args.split(" "));
+        //     let stdoutBuild = resBuild.stdout.toString();
+        //     let stderrBuild = resBuild.stderr.toString();
+        //     let stdoutExec = "";
+        //     let stderrExec = "";
+        //     console.log("编译标准输出：", stdoutBuild);
+        //     console.log("编译错误输出：", stderrBuild);
+        //     if (stderrBuild === "") {
+        //         const resExec = spawnSync(fileBin);
+        //         stdoutExec = resExec.stdout.toString();
+        //         stderrExec = resExec.stderr.toString();
+        //         console.log("执行标准输出：", stdoutExec);
+        //         console.log("执行错误输出：", stderrExec);
+        //     }
 
-            let problemTestcase = "";
-            const problemArr = json.getJSONDataByField(
-                path.join(rootDir, "jsons/problem.json"),
-                "equal",
-                "id",
-                dataObj.problemId);
-            if (problemArr.length > 0) {
-                const problemObj = problemArr[0];
-                problemTestcase = problemObj.problemTestcase;
-            }
-            console.log("测试用例输出：", problemTestcase);
-            let submitStatus = "未通过";
-            let submitInfo = "";
-            if (stderrBuild === "" &&
-                stdoutExec === problemTestcase) {
-                submitStatus = "已通过";
-            }
-            console.log("判题状态输出：", submitStatus);
-            console.log();
+        //     let problemTestcase = "";
+        //     const problemArr = json.getJSONDataByField(
+        //         path.join(rootDir, "jsons/problem.json"),
+        //         "equal",
+        //         "id",
+        //         dataObj.problemId);
+        //     if (problemArr.length > 0) {
+        //         const problemObj = problemArr[0];
+        //         problemTestcase = problemObj.problemTestcase;
+        //     }
+        //     console.log("测试用例输出：", problemTestcase);
+        //     let submitStatus = "未通过";
+        //     let submitInfo = "";
+        //     if (stderrBuild === "" &&
+        //         stdoutExec === problemTestcase) {
+        //         submitStatus = "已通过";
+        //     }
+        //     console.log("判题状态输出：", submitStatus);
+        //     console.log();
 
-            if (stderrBuild !== "") {
-                submitInfo = stderrBuild;
-            }
-            else if (stderrExec !== "") {
-                submitInfo = stderrExec;
-            }
+        //     if (stderrBuild !== "") {
+        //         submitInfo = stderrBuild;
+        //     }
+        //     else if (stderrExec !== "") {
+        //         submitInfo = stderrExec;
+        //     }
 
-            json.addJSONDataToBack(
-                path.join(rootDir, "jsons/submit.json"), {
-                    id: uuidv4(),
-                    userId: dataObj.userId,
-                    problemId: dataObj.problemId,
-                    submitStatus: submitStatus,
-                    submitDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-                    submitInfo: submitInfo
-                });
+        //     json.addJSONDataToBack(
+        //         path.join(rootDir, "jsons/submit.json"), {
+        //             id: uuidv4(),
+        //             userId: dataObj.userId,
+        //             problemId: dataObj.problemId,
+        //             submitStatus: submitStatus,
+        //             submitDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+        //             submitInfo: submitInfo
+        //         });
 
-            res.end("success");
-        });
+        //     res.end("success");
+        // });
     },
-    uploadFileToServer: (req, res) => {
-        let form = new formidable.IncomingForm();
-        form.uploadDir = uploadDir;      // 设置文件上传目录
-        form.multiples = true;               // 设置多文件上传
-        form.keepExtensions = true;          // 保持原有扩展名
-        form.maxFileSize = 10 * 1024 * 1024; // 设置文件大小为10MB
-
-        form.on("error", (err) => {
-            res.writeHead(400, { "content-type": "text/html;charset=utf-8" });
-            res.end("errorMaxSize");
-            res.end(JSON.stringify({
-                code: 1,
-                msg: "errorMaxSize",
-                data: {}
-            }));
-            return;
-        });
-
-        form.parse(req, (err, fields, files) => {
-            if (err) {
-                res.writeHead(500, { "content-type": "text/html;charset=utf-8" });
-                res.end(JSON.stringify({
-                    code: 1,
-                    msg: "errorAnalysis",
-                    data: {}
-                }));
-                return;
-            }
-
-            if (Object.prototype.toString.call(files.upload) ===
-                "[object Object]") {
-                files.upload = [files.upload];
-            }
-
-            let fileNameNewArr = [];
-            for (let file of files.upload) {
-                let fileNameOld = file.name;
-                console.log("文件名称: ", fileNameOld);
-
-                let suffix = fileNameOld.slice(fileNameOld.lastIndexOf("."));
-                let prefix = fileNameOld.slice(0, fileNameOld.lastIndexOf("."));
-
-                let filePathOld = file.path;
-                let fileNameNew = prefix + "-" +
-                                  dayjs().format("YYYY-MM-DD-HH-mm-ss") + suffix;
-                let uploadDirNew = uploadDir;
-                fileNameNewArr.push(fileNameNew);
-                if (fields.dir !== undefined) {
-                    uploadDirNew = path.join(uploadDir, fields.dir + "/");
-                }
-                let filePathNew = uploadDirNew + fileNameNew;
-
-                fs.rename(filePathOld, filePathNew, function(err) {
-                    if (err) {
-                        res.end(JSON.stringify({
-                            code: 1,
-                            msg: "errorRename",
-                            data: {}
-                        }));
-                        return;
-                    }
-                });
-            }
-
-            res.end(JSON.stringify({
-                code: 0,
-                msg: "success",
-                data: {
-                    fileNameNew: fileNameNewArr
-                }
-            }));
-        });
+    uploadFile: (req, res) => {
+        uploadFile(req, res, "online", 50);
+    },
+    uploadFileByScript: (req, res) => {
+        uploadFile(req, res, "script", 50);
     },
     verifyCookie: (cookie) => {
         const cookieArr = splitCookieToArr(cookie);

@@ -1,6 +1,7 @@
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
+const { constrainedMemory } = require("process");
 
 const {
     port,
@@ -13,9 +14,10 @@ const {
 const {
     getProblemData,
     getSubmitTableData,
-    judgeProblemAnswerIsRight,
-    uploadFileToServer,
-    verifyUserInfo
+    judgeProblem,
+    uploadFile,
+    uploadFileByScript,
+    verifyUserInfo,
 } = require("./control/control.js");
 
 const contentTypeObj = {
@@ -91,11 +93,14 @@ const server = http.createServer((req, res) => {
     else if (url === "/api/getProblemData" && method === "post") {
         getProblemData(req, res);
     }
-    else if (url === "/api/judgeProblemAnswerIsRight" && method === "post") {
-        judgeProblemAnswerIsRight(req, res);
+    else if (url === "/api/judgeProblem" && method === "post") {
+        judgeProblem(req, res);
     }
-    else if (url === "/api/uploadFileToServer" && method === "post") {
-        uploadFileToServer(req, res);
+    else if (url === "/api/uploadFile" && method === "post") {
+        uploadFile(req, res);
+    }
+    else if (url === "/api/uploadFileByScript" && method === "post") {
+        uploadFileByScript(req, res);
     }
     else {
         sendPage(res, path.join(rootDir, url));

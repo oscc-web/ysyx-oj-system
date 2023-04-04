@@ -30,16 +30,16 @@ layui.use(["admin", "form", "layer", "tablePlug", "upload"], function() {
 
     upload.render({
         elem: "#upload",
-        url: "/api/uploadFileToServer",
+        url: "/api/uploadFile",
         data: {
-            dir: userId
+            token: userId
         },
         method: "post",
         accept: "file",
-        exts: "c|cc|cpp|v|scala",
+        exts: "tar.bz2|tar.gz",
         auto: true,
         field: "upload",
-        size: 10 * 1024,
+        size: 50 * 1024,
         multiple: false,
         number: 0,
         drag: false,
@@ -76,12 +76,10 @@ layui.use(["admin", "form", "layer", "tablePlug", "upload"], function() {
             layer.closeAll("loading");
             var obj = res;
             if (obj.msg === "success") {
+                fileNameNew = obj.data.fileNameNew;
                 layer.msg("上传成功！", {
                     time: 1000
                 });
-                if (obj.data.fileNameNew.length > 0) {
-                    fileNameNew = obj.data.fileNameNew[0];
-                }
             }
             else if (obj.msg === "errorMaxSize") {
                 layer.alert("上传失败，文件大小超过10MB！", {
@@ -111,7 +109,7 @@ layui.use(["admin", "form", "layer", "tablePlug", "upload"], function() {
 
     form.on("submit(confirm)", function() {
         layer.load();
-        $.post("/api/judgeProblemAnswerIsRight", JSON.stringify({
+        $.post("/api/judgeProblem", JSON.stringify({
             fileName: fileNameNew,
             userId: userId,
             problemId: problemId
