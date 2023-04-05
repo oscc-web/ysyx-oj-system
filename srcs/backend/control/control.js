@@ -91,7 +91,10 @@ function judgeProblem(res, type, obj) {
         res.end("success");
     }
     else if (type === "script") {
-        res.end(submitStatus + "\n" + submitInfo);
+        res.end(submitStatus + "\n" +
+                submitInfo + "\n" +
+                "具体判题结果请访问 http://39.101.140.145:10140 网站进行查看" +
+                "（在网站右上角的【操作中心】下使用【TOKEN】登录）");
     }
 }
 
@@ -305,34 +308,6 @@ module.exports = {
                 }));
             }
         }
-
-        // req.on("data", (data) => {
-        // });
-        // req.on("end", () => {
-        //     res.writeHead(200, {
-        //         "content-Type": "text/plain;charset=utf-8"
-        //     });
-
-        //     let problemArr = json.getJSONDataByOrder(
-        //         path.join(dbDir, "problem.json"),
-        //         "problemNo",
-        //         "val",
-        //         "asc");
-        //     console.log(problemArr);
-
-        //     if (problemArr.length > 0) {
-        //         res.end(JSON.stringify({
-        //             msg: "success",
-        //             data: problemArr
-        //         }));
-        //     }
-        //     else {
-        //         res.end(JSON.stringify({
-        //             msg: "error",
-        //             data: []
-        //         }));
-        //     }
-        // });
     },
     getSubmitTableData: (req, res) => {
         let dataStr = "";
