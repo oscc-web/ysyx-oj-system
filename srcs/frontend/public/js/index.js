@@ -78,13 +78,17 @@ layui.use(["admin", "element", "index", "layer"], function() {
     });
 
     function openLoginWindow() {
-        admin.open({
+        var winIndex = admin.open({
             type: 2,
             title: "用户登录窗口",
             content: "../../srcs/frontend/public/html/login.html" + version,
             area: ["360px", "250px"],
             offset: "auto",
             shade: 0.5,
+            success: function(layero, index) {
+                var iframeWin = window[layero.find("iframe")[0]["name"]];
+                iframeWin.getWindowIndex(winIndex);
+            },
             end: function() {
                 setUserInfo();
             }

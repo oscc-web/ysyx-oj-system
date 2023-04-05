@@ -15,13 +15,30 @@
     </div>
     <form class="layui-form model-form" method="post" onclick="return false;">
         <div class="layui-form-item">
+            <label class="layui-form-label">登录方式：<span style="color:red">*</span></label>
+            <div class="layui-input-block select_option_to_layer">
+                <select id="loginType" lay-filter="loginType" lay-verType="tips" lay-verify="required">
+                    <option value="">选择方式</option>
+                    <option value="唯一标识" selected>唯一标识（TOKEN）</option>
+                    <option value="账号密码">账号密码</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">唯一标识：<span style="color:red">*</span></label>
+            <div class="layui-input-block">
+                <input id="userId" class="layui-input" name="userId" type="text"
+                       placeholder="请输入唯一标识" lay-verType="tips" lay-verify="required" />
+            </div>
+        </div>
+        <div class="layui-form-item" style="display:none;">
             <label class="layui-form-label">用户账号：<span style="color:red">*</span></label>
             <div class="layui-input-block">
                 <input id="userAccount" class="layui-input" name="userAccount" type="text"
                        placeholder="请输入用户账号" lay-verType="tips" lay-verify="required" />
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item" style="display:none;">
             <label class="layui-form-label">用户密码：<span style="color:red">*</span></label>
             <div class="layui-input-block">
                 <input id="userPassword" class="layui-input" name="userPassword" type="password"

@@ -407,25 +407,47 @@ module.exports = {
             console.log("登录时间：", loginDate);
             logLoginWriteStream.write("登录时间：" + loginDate + "\n");
 
-            console.log("用户账号：", dataObj.userAccount);
-            logLoginWriteStream.write("用户账号：" + dataObj.userAccount + "\n");
+            const userId = dataObj.userId;
+            const userAccount = dataObj.userAccount;
+            const userPassword = dataObj.userPassword;
 
-            let userArr = json.getJSONDataByField(
-                path.join(dbDir, "user.json"),
-                "equal",
-                "userAccount",
-                dataObj.userAccount);
+            let loginFlag = false;
+            let userArr = [];
+            if (userId != "") {
+                console.log("用户标识：", userId);
+                logLoginWriteStream.write("用户标识：" + userId + "\n");
+                userArr = json.getJSONDataByField(
+                    path.join(dbDir, "user.json"),
+                    "equal",
+                    "id",
+                    userId);
+                if (userArr.length > 0) {
+                    loginFlag = true;
+                }
+            }
+            else {
+                console.log("用户账号：", userAccount);
+                logLoginWriteStream.write("用户账号：" + userAccount + "\n");
+                userArr = json.getJSONDataByField(
+                    path.join(dbDir, "user.json"),
+                    "equal",
+                    "userAccount",
+                    userAccount);
+                if (userArr.length === 1 &&
+                    userArr[0].userPassword === userPassword) {
+                    loginFlag = true;
+                }
+            }
             console.log(userArr);
 
-            if (userArr.length === 1 &&
-                userArr[0].userPassword === dataObj.userPassword) {
+            if (loginFlag) {
                 console.log("验证成功");
                 logLoginWriteStream.write("验证成功\n\n");
 
                 // 设置Cookie过期时间为2小时
                 res.writeHead(200, {
-                    "Set-Cookie": dataObj.userAccount + "=" +
-                                  dataObj.userPassword + ";" +
+                    "Set-Cookie": userAccount + "=" +
+                                  userPassword + ";" +
                                  "path=/;expires=" +
                                   new Date(Date.now() + 1000 * 60 * 60 * 2).toGMTString()
                 });
@@ -435,9 +457,6 @@ module.exports = {
                 }));
             }
             else {
-                console.log("用户密码：", dataObj.userPassword)
-                logLoginWriteStream.write("用户密码：" + dataObj.userPassword + "\n");
-
                 console.log("验证失败\n");
                 logLoginWriteStream.write("验证失败\n\n");
 
