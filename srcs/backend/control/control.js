@@ -93,8 +93,8 @@ function judgeProblem(res, type, obj) {
     else if (type === "script") {
         res.end(submitStatus + "\n" +
                 submitInfo + "\n" +
-                "具体判题结果请访问 http://39.101.140.145:10140 网站进行查看" +
-                "（在网站右上角的【操作中心】下使用【TOKEN】登录）");
+                "具体判题结果请登录 http://39.101.140.145:10140 网站进行查看" +
+                "（登录功能在网站右上角的【操作中心】下）");
     }
 }
 
