@@ -148,13 +148,13 @@ layui.use(["admin", "form", "layer", "table"], function() {
     function searchSubmitTable() {
         table.reload("submitTable", {
             url: "/api/getSubmitTableData",
-            where: {
+            where: JSON.stringify({
                 userId: userId,
                 userType: userType,
                 submitStatus: submitStatus,
                 searchCondition: searchCondition,
                 searchKeywords: searchKeywords
-            },
+            }),
             page: {
                 curr: 1
             }
@@ -213,13 +213,13 @@ layui.use(["admin", "form", "layer", "table"], function() {
     });
 
     $("#export").click(function() {
-        exportTableData("/api/getSubmitTableData", {
+        exportTableData("/api/getSubmitTableData", JSON.stringify({
             userId: userId,
             userType: userType,
             submitStatus: submitStatus,
             searchCondition: searchCondition,
             searchKeywords: searchKeywords
-        }, {
+        }), {
             problemName: "题目名称",
             problemNo: "题目编号",
             problemDiff: "题目难度",

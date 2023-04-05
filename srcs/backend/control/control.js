@@ -1,5 +1,6 @@
 const { spawnSync } = require("child_process");
 const fs = require("fs");
+const querystring = require("querystring");
 
 const path = require("path");
 const dayjs = require("dayjs");
@@ -247,25 +248,37 @@ function uploadFile(req, res, type, maxFileSize) {
 
 module.exports = {
     getProblemData: (req, res) => {
-        req.on("data", (data) => {
-        });
-        req.on("end", () => {
-            res.writeHead(200, {
-                "content-Type": "text/plain;charset=utf-8"
-            });
+        const url = req.url;
+        const obj = querystring.parse(url.split("?")[1]);
+        console.log(obj);
 
-            let problemArr = json.getJSONDataByOrder(
-                path.join(dbDir, "problem.json"),
-                "problemNo",
-                "val",
-                "asc");
-            console.log(problemArr);
+        let problemArr = json.getJSONDataByOrder(
+            path.join(dbDir, "problem.json"),
+            "problemNo",
+            "val",
+            "asc");
+        console.log(problemArr);
 
-            if (problemArr.length > 0) {
+        if (problemArr.length > 0) {
+            if (obj.type === "brief") {
+                let resStr = "";
+                for (var i = 0; i < problemArr.length; i++) {
+                    const problemObj = problemArr[i];
+                    resStr += ("[" + problemObj.id + ": " +
+                                     problemObj.problemName + "]\n");
+                }
+                res.end(resStr);
+            }
+            else {
                 res.end(JSON.stringify({
                     msg: "success",
                     data: problemArr
                 }));
+            }
+        }
+        else {
+            if (obj.type === "brief") {
+                res.end("无\n");
             }
             else {
                 res.end(JSON.stringify({
@@ -273,7 +286,35 @@ module.exports = {
                     data: []
                 }));
             }
-        });
+        }
+
+        // req.on("data", (data) => {
+        // });
+        // req.on("end", () => {
+        //     res.writeHead(200, {
+        //         "content-Type": "text/plain;charset=utf-8"
+        //     });
+
+        //     let problemArr = json.getJSONDataByOrder(
+        //         path.join(dbDir, "problem.json"),
+        //         "problemNo",
+        //         "val",
+        //         "asc");
+        //     console.log(problemArr);
+
+        //     if (problemArr.length > 0) {
+        //         res.end(JSON.stringify({
+        //             msg: "success",
+        //             data: problemArr
+        //         }));
+        //     }
+        //     else {
+        //         res.end(JSON.stringify({
+        //             msg: "error",
+        //             data: []
+        //         }));
+        //     }
+        // });
     },
     getSubmitTableData: (req, res) => {
         let dataStr = "";
@@ -283,7 +324,7 @@ module.exports = {
         req.on("end", () => {
             let dataObj = {};
             try {
-                dataObj = splitParamToKeyValue(dataStr);
+                dataObj = JSON.parse(dataStr);
             }
             catch (e) {
                 console.log(e);

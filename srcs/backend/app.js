@@ -16,7 +16,7 @@ const {
     judgeProblem,
     uploadFile,
     uploadFileByScript,
-    verifyUserInfo,
+    verifyUserInfo
 } = require("./control/control.js");
 
 const contentTypeObj = {
@@ -83,13 +83,13 @@ const server = http.createServer((req, res) => {
     if (url === "/" && method === "get") {
         sendPage(res, "./srcs/frontend/public/index.html");
     }
-    if (url === "/api/verifyUserInfo" && method === "post") {
+    else if (url === "/api/verifyUserInfo" && method === "post") {
         verifyUserInfo(req, res)
     }
     else if (url === "/api/getSubmitTableData" && method === "post") {
         getSubmitTableData(req, res);
     }
-    else if (url === "/api/getProblemData" && method === "post") {
+    else if (url === "/api/getProblemData" && method === "get") {
         getProblemData(req, res);
     }
     else if (url === "/api/judgeProblem" && method === "post") {

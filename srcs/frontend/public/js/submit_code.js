@@ -14,8 +14,7 @@ layui.use(["admin", "form", "layer", "tablePlug", "upload"], function() {
             userId = userObj.id;
         }
 
-        $.post("/api/getProblemData", {
-        }, function(res) {
+        $.get("/api/getProblemData", function(res) {
             var obj = JSON.parse(res);
             for (var i = 0; i < obj.data.length; i++) {
                 var problemObj = obj.data[i];
