@@ -15,6 +15,15 @@ layui.use(["admin", "element", "index", "layer"], function() {
             title: "主页",
             url: "../public/html/home.html" + version
         });
+
+        var theme = "theme-green-dark";
+        if (!layui.data(admin.tableName).theme) {
+            admin.changeTheme(getThemeDir() + theme + ".css");
+            layui.data(admin.tableName, {
+                key: "theme",
+                value: theme
+            });
+        }
     });
 
     $(".layui-layout-left li").click(function() {

@@ -6,18 +6,10 @@ layui.use(["admin", "form"], function() {
         $(".btnTheme").removeClass("active");
         if (theme) {
             $(".btnTheme[theme=" + theme + "]").addClass("active");
-            // layui.data(admin.tableName, {
-            //     key: "theme",
-            //     value: theme
-            // });
         }
         else {
             $(".btnTheme").eq(0).addClass("active");
             theme = $(".btnTheme").eq(0).attr("theme");
-            // layui.data(admin.tableName, {
-            //     key: "theme",
-            //     remove: true
-            // });
         }
         layui.data(admin.tableName, {
             key: "theme",
