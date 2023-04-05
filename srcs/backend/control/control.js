@@ -146,6 +146,10 @@ function judgeProblem(req, res) {
 }
 
 function uploadFile(req, res, type, maxFileSize) {
+    if (fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir);
+    }
+
     let form = new formidable.IncomingForm();
     form.uploadDir = uploadDir;                   // 设置文件上传目录
     form.multiples = true;                        // 设置多文件上传
