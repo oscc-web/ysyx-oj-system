@@ -9,8 +9,8 @@
 ![screenshot](./docs/screenshot.png)
 
 <p align="center">
-    <a title="Version" target="_blank" href="https://hexo.io">
-        <img alt="Hexo Version" src="https://img.shields.io/badge/version-1.0.0-brightgreen" />
+    <a title="Project Version">
+        <img alt="Project Version" src="https://img.shields.io/badge/version-1.0.0-brightgreen" />
     </a>
     <a title="Node Version" target="_blank" href="https://nodejs.org">
         <img alt="Node Version" src="https://img.shields.io/badge/Node-%3E%3D16.19.1-blue" />
@@ -30,7 +30,7 @@
     </a>
 </p>
 
-<p align="center">中文简体 | <a title="English" href="README.md"> English</a></p>
+<p align="center">中文简体 | <a title="English" href="README.md">English</a></p>
 
 <p align="center">
     <span>预览：</span>
@@ -55,15 +55,16 @@
 
 ### 下载源码
 
-  ```sh
-  $> cd your-workspaces
-  $> git clone git@github.com:myyerrol/ysyx-oj-system.git
-  ```
+```sh
+$> cd your-workspaces
+$> git clone git@github.com:myyerrol/ysyx-oj-system.git
+```
 
 ### 安装依赖
-  ```sh
-  $> npm install
-  ```
+
+```sh
+$> npm install
+```
 
 ### 配置端口
 
@@ -71,9 +72,9 @@
 
 ### 运行系统
 
-  ```sh
-  $> npm run serve
-  ```
+```sh
+$> npm run serve
+```
 
 ### 更新源码
 

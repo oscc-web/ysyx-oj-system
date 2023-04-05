@@ -146,7 +146,7 @@ function judgeProblem(req, res) {
 }
 
 function uploadFile(req, res, type, maxFileSize) {
-    if (fs.existsSync(uploadDir)) {
+    if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir);
     }
 
