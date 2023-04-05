@@ -4,7 +4,6 @@ layui.use(["admin", "form", "layer", "tablePlug", "upload"], function() {
     var layer  = layui.layer;
     var upload = layui.upload;
 
-    var fileNameNew = "";
     var userId = "";
     var problemId = "";
 
@@ -75,7 +74,6 @@ layui.use(["admin", "form", "layer", "tablePlug", "upload"], function() {
             layer.closeAll("loading");
             var obj = res;
             if (obj.msg === "success") {
-                fileNameNew = obj.data.fileNameNew;
                 layer.msg("上传成功！", {
                     time: 1000
                 });
@@ -109,9 +107,8 @@ layui.use(["admin", "form", "layer", "tablePlug", "upload"], function() {
     form.on("submit(confirm)", function() {
         layer.load();
         $.post("/api/judgeProblem", JSON.stringify({
-            userId: userId,
-            problemId: problemId,
-            fileName: fileNameNew,
+            token: userId,
+            problemId: problemId
         }), function(res) {
             layer.closeAll("loading");
             if (res === "success") {

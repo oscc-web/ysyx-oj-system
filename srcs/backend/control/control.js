@@ -12,7 +12,8 @@ const json = require("../models/json.js");
 const {
     uploadDir,
     dbDir,
-    logLoginPath
+    logLoginPath,
+    rootDir
 } = require("../config/config.js");
 
 let logLoginWriteStream = fs.createWriteStream(logLoginPath, { flags: "a" });
@@ -24,6 +25,74 @@ function getIPAddress(req) {
                          req.socket.remoteAddress ||
                          "";
     return ip;
+}
+
+function judgeProblem(res, type, obj) {
+    console.log(obj);
+
+    let problemNo = "";
+    const problemArr = json.getJSONDataByField(
+        path.join(dbDir, "problem.json"),
+        "equal",
+        "id",
+        obj.problemId);
+    if (problemArr.length > 0) {
+        const problemObj = problemArr[0];
+        problemNo = problemObj.problemNo;
+    }
+
+    let testFilePath = path.join(rootDir, "tests/" + problemNo + ".sh");
+    if (!fs.existsSync(testFilePath)) {
+        res.end("判题失败，管理员未添加当前题目的测试脚本");
+        return;
+    }
+
+    const fileDir = path.join(uploadDir, obj.token + "/extract/");
+
+    const resBuild = spawnSync("bash", [testFilePath, fileDir, "all"]);
+    let stdoutBuild = resBuild.stdout.toString();
+    let stderrBuild = resBuild.stderr.toString();
+    let stdoutExec = "";
+    let stderrExec = "";
+    console.log("编译标准输出：", stdoutBuild);
+    console.log("编译错误输出：", stderrBuild);
+    if (stderrBuild === "") {
+        const resExec = spawnSync("bash", [testFilePath, fileDir, "run"])
+        stdoutExec = resExec.stdout.toString();
+        stderrExec = resExec.stderr.toString();
+        console.log("执行标准输出：", stdoutExec);
+        console.log("执行错误输出：", stderrExec);
+    }
+
+    let submitStatus = "未通过";
+    let submitInfo = "";
+    if (stderrBuild === "" && stderrExec === "") {
+        submitStatus = "已通过";
+    }
+    console.log("判题状态输出：", submitStatus);
+
+    if (stderrBuild !== "") {
+        submitInfo = stderrBuild;
+    }
+    else if (stderrExec !== "") {
+        submitInfo = stderrExec;
+    }
+
+    json.addJSONDataToBack(
+        path.join(dbDir, "submit.json"), {
+            id: uuidv4(),
+            userId: obj.token,
+            problemId: obj.problemId,
+            submitStatus: submitStatus,
+            submitDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+            submitInfo: submitInfo
+        });
+    if (type === "online") {
+        res.end("success");
+    }
+    else if (type === "script") {
+        res.end(submitStatus + "\n" + submitInfo);
+    }
 }
 
 function splitCookieToArr(cookie) {
@@ -64,86 +133,6 @@ function splitParamToKeyValue(param) {
     }
 
     return paramObj;
-}
-
-function judgeProblem(req, res) {
-    let dataStr = "";
-    req.on("data", (data) => {
-        dataStr += data;
-    });
-    req.on("end", () => {
-        let dataObj = {};
-        try {
-            dataObj = JSON.parse(dataStr);
-        }
-        catch (e) {
-            console.log(e);
-        }
-        console.log(dataObj);
-
-        const fileDir = path.join(uploadDir, dataObj.userId + "/");
-        const filePath = path.join(fileDir, dataObj.fileName);
-        const fileBin = path.join(fileDir, "a.out");
-
-        const args =
-            "-O2 -Wall -Werror " +
-            "-o " + fileBin + " " +
-            filePath;
-
-        const resBuild = spawnSync("gcc", args.split(" "));
-        let stdoutBuild = resBuild.stdout.toString();
-        let stderrBuild = resBuild.stderr.toString();
-        let stdoutExec = "";
-        let stderrExec = "";
-        console.log("编译标准输出：", stdoutBuild);
-        console.log("编译错误输出：", stderrBuild);
-        if (stderrBuild === "") {
-            const resExec = spawnSync(fileBin);
-            stdoutExec = resExec.stdout.toString();
-            stderrExec = resExec.stderr.toString();
-            console.log("执行标准输出：", stdoutExec);
-            console.log("执行错误输出：", stderrExec);
-        }
-
-        let problemTestcase = "";
-        const problemArr = json.getJSONDataByField(
-            path.join(dbDir, "problem.json"),
-            "equal",
-            "id",
-            dataObj.problemId);
-        if (problemArr.length > 0) {
-            const problemObj = problemArr[0];
-            problemTestcase = problemObj.problemTestcase;
-        }
-        console.log("测试用例输出：", problemTestcase);
-        let submitStatus = "未通过";
-        let submitInfo = "";
-        if (stderrBuild === "" &&
-            stdoutExec === problemTestcase) {
-            submitStatus = "已通过";
-        }
-        console.log("判题状态输出：", submitStatus);
-        console.log();
-
-        if (stderrBuild !== "") {
-            submitInfo = stderrBuild;
-        }
-        else if (stderrExec !== "") {
-            submitInfo = stderrExec;
-        }
-
-        json.addJSONDataToBack(
-            path.join(dbDir, "submit.json"), {
-                id: uuidv4(),
-                userId: dataObj.userId,
-                problemId: dataObj.problemId,
-                submitStatus: submitStatus,
-                submitDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-                submitInfo: submitInfo
-            });
-
-        res.end("success");
-    });
 }
 
 function uploadFile(req, res, type, maxFileSize) {
@@ -189,12 +178,47 @@ function uploadFile(req, res, type, maxFileSize) {
 
         let filePathOld = file.path;
         let fileNameNew = prefix + "-" +
-                            dayjs().format("YYYY-MM-DD-HH-mm-ss") + suffix;
+                          dayjs().format("YYYY-MM-DD-HH-mm-ss") + suffix;
         let uploadDirNew = uploadDir;
 
-        if (fields.token !== undefined) {
-            uploadDirNew = path.join(uploadDir, fields.token + "/");
+        let userArr = json.getJSONDataByField(
+            path.join(dbDir, "user.json"),
+            "equal",
+            "id",
+            fields.token)
+        if (userArr.length === 0) {
+            res.end(JSON.stringify({
+                code: 1,
+                msg: "提交失败，用户标识【TOKEN】不正确",
+                data: []
+            }));
+            if (fs.existsSync(filePathOld)) {
+                fs.rmSync(filePathOld);
+            };
+            return;
         }
+
+        if (type === "script") {
+            let problemArr = json.getJSONDataByField(
+                path.join(dbDir, "problem.json"),
+                "equal",
+                "id",
+                fields.problemId);
+            if (problemArr.length === 0) {
+                res.end(JSON.stringify({
+                    code: 1,
+                    msg: "提交失败，问题标识【PROBLEM_ID】不正确",
+                    data: []
+                }));
+                console.log(filePathOld);
+                if (fs.existsSync(filePathOld)) {
+                    fs.rmSync(filePathOld);
+                };
+                return;
+            }
+        }
+
+        uploadDirNew = path.join(uploadDir, fields.token + "/")
         let filePathNew = uploadDirNew + fileNameNew;
 
         console.log("历史路径：", filePathOld);
@@ -235,13 +259,7 @@ function uploadFile(req, res, type, maxFileSize) {
             }));
         }
         else if (type === "script") {
-            res.end(JSON.stringify({
-                code: 0,
-                msg: "success",
-                data: {
-                    fileNameNew: fileNameNew
-                }
-            }));
+            judgeProblem(res, type, fields);
         }
     });
 }
@@ -397,7 +415,20 @@ module.exports = {
         });
     },
     judgeProblem:(req, res) => {
-        judgeProblem(req, res);
+        let dataStr = "";
+        req.on("data", (data) => {
+            dataStr += data;
+        });
+        req.on("end", () => {
+            let dataObj = {};
+            try {
+                dataObj = JSON.parse(dataStr);
+            }
+            catch (e) {
+                console.log(e);
+            }
+            judgeProblem(res, "online", dataObj);
+        });
     },
     uploadFile: (req, res) => {
         uploadFile(req, res, "online", 50);

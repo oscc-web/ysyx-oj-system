@@ -9,14 +9,13 @@ mkdir $PRJ_DIR/db
 cat > $PRJ_DIR/db/problem.json <<EOF
 [
     {
-        "id": "febcebaa-bdfe-b576-abd3-ed75bd7e5c9e",
+        "id": "11111111",
         "problemName": "Hello World",
         "problemNo": "0001",
         "problemDiff": "简单",
         "problemLang": "C",
         "problemTags": "程序设计",
-        "problemDate": "$DATE",
-        "problemTestcase": "Hello World!"
+        "problemDate": "$DATE"
     }
 ]
 EOF
@@ -27,7 +26,7 @@ EOF
 cat > $PRJ_DIR/db/user.json <<EOF
 [
     {
-        "id": "eac9f317-f328-84b6-265c-df594c7a241d",
+        "id": "00000000",
         "userName": "管理员",
         "userAccount": "root",
         "userPassword": "root",
