@@ -3,7 +3,7 @@ const path = require("path");
 const rootDir = path.join(process.cwd());
 
 module.exports = {
-    port: 5050,
+    port: 10140,
     rootDir: rootDir,
     uploadDir: path.join(rootDir, "uploads/"),
     logDir: path.join(rootDir, "logs/"),

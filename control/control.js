@@ -1,4 +1,4 @@
-const { exec, execSync, spawnSync } = require("child_process");
+const { spawnSync } = require("child_process");
 const fs = require("fs");
 
 const path = require("path");
@@ -88,23 +88,6 @@ function judgeProblem(req, res) {
             "-O2 -Wall -Werror " +
             "-o " + fileBin + " " +
             filePath;
-
-        // exec("gcc " + args, (errBuild, stdoutBuild, stderrBuild) => {
-        //     console.log("编译标准输出：", stdoutBuild)
-        //     if (errBuild) {
-        //         // console.log("编译异常错误：", errBuild);
-        //         console.log("编译标准错误：", stderrBuild);
-        //     }
-        //     else {
-        //         exec(fileBin, (errExec, stdoutExec, stderrExec) => {
-        //             console.log("执行标准输出：", stdoutExec);
-        //             if (errExec) {
-        //                 // console.log("执行异常错误：", errExec);
-        //                 console.log("执行标准错误：", stderrExec);
-        //             }
-        //         });
-        //     }
-        // });
 
         const resBuild = spawnSync("gcc", args.split(" "));
         let stdoutBuild = resBuild.stdout.toString();
