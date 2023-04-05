@@ -90,8 +90,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
         }
 
         if (userType === "管理员") {
-            $("#import").attr("disabled", true);
-            $("#import").addClass("layui-btn-disabled");
+            // $("#submit").hide();
 
             tableCols[0].splice(6, 0, {
                 field: "userName",
@@ -102,8 +101,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
             });
         }
         else {
-            $("#import").attr("disabled", false);
-            $("#import").removeClass("layui-btn-disabled");
+            // $("#submit").show();
         }
 
         table.render({
@@ -196,7 +194,7 @@ layui.use(["admin", "form", "layer", "table"], function() {
         handleSubmitInfoData(obj);
     });
 
-    $("#import").click(function() {
+    $("#submit").click(function() {
         admin.open({
             type: 2,
             title: "提交代码窗口",
