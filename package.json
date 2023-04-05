@@ -2,7 +2,7 @@
     "name": "ysyx-oj-system",
     "version": "1.0.0",
     "scripts": {
-        "serve": "node ./app.js"
+        "serve": "node ./srcs/backend/app.js"
     },
     "dependencies": {
         "dayjs": "^1.11.7",

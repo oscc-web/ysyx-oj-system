@@ -13,7 +13,7 @@ layui.use(["admin", "element", "index", "layer"], function() {
         setUserInfo();
         index.openTab({
             title: "主页",
-            url: "../public/html/home.html" + version
+            url: "../../srcs/frontend/public/html/home.html" + version
         });
 
         var theme = "theme-green-dark";
@@ -81,7 +81,7 @@ layui.use(["admin", "element", "index", "layer"], function() {
         admin.open({
             type: 2,
             title: "用户登录窗口",
-            content: "../public/html/login.html" + version,
+            content: "../../srcs/frontend/public/html/login.html" + version,
             area: ["360px", "250px"],
             offset: "auto",
             shade: 0.5,

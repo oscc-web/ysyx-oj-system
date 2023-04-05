@@ -1,7 +1,6 @@
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
-const { constrainedMemory } = require("process");
 
 const {
     port,
@@ -82,7 +81,7 @@ const server = http.createServer((req, res) => {
     }
 
     if (url === "/" && method === "get") {
-        sendPage(res, "./public/index.html");
+        sendPage(res, "./srcs/frontend/public/index.html");
     }
     if (url === "/api/verifyUserInfo" && method === "post") {
         verifyUserInfo(req, res)

@@ -110,9 +110,9 @@ layui.use(["admin", "form", "layer", "tablePlug", "upload"], function() {
     form.on("submit(confirm)", function() {
         layer.load();
         $.post("/api/judgeProblem", JSON.stringify({
-            fileName: fileNameNew,
             userId: userId,
-            problemId: problemId
+            problemId: problemId,
+            fileName: fileNameNew,
         }), function(res) {
             layer.closeAll("loading");
             if (res === "success") {

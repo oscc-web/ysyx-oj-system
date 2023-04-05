@@ -10,8 +10,8 @@ const json = require("../models/json.js");
 
 const {
     uploadDir,
-    logLoginPath,
-    rootDir
+    dbDir,
+    logLoginPath
 } = require("../config/config.js");
 
 let logLoginWriteStream = fs.createWriteStream(logLoginPath, { flags: "a" });
@@ -106,7 +106,7 @@ function judgeProblem(req, res) {
 
         let problemTestcase = "";
         const problemArr = json.getJSONDataByField(
-            path.join(rootDir, "jsons/problem.json"),
+            path.join(dbDir, "problem.json"),
             "equal",
             "id",
             dataObj.problemId);
@@ -132,7 +132,7 @@ function judgeProblem(req, res) {
         }
 
         json.addJSONDataToBack(
-            path.join(rootDir, "jsons/submit.json"), {
+            path.join(dbDir, "submit.json"), {
                 id: uuidv4(),
                 userId: dataObj.userId,
                 problemId: dataObj.problemId,
@@ -251,7 +251,7 @@ module.exports = {
             });
 
             let problemArr = json.getJSONDataByOrder(
-                path.join(rootDir, "jsons/problem.json"),
+                path.join(dbDir, "problem.json"),
                 "problemNo",
                 "val",
                 "asc");
@@ -293,14 +293,14 @@ module.exports = {
             let submitArr = [];
             if (dataObj.userType === "管理员") {
                 submitArr = json.getJSONDataByField(
-                    path.join(rootDir, "jsons/submit.json"),
+                    path.join(dbDir, "submit.json"),
                     "equal",
                     "userId",
                     dataObj.userId);
             }
             else {
                 submitArr = json.getJSONDataAll(
-                    path.join(rootDir, "jsons/submit.json"));
+                    path.join(dbDir, "submit.json"));
             }
 
             submitArr = json.getJSONDataByOrder(submitArr,
@@ -311,7 +311,7 @@ module.exports = {
                 let submitObj = submitArr[i];
 
                 let userArr = json.getJSONDataByField(
-                    path.join(rootDir, "jsons/user.json"),
+                    path.join(dbDir, "user.json"),
                     "equal",
                     "id",
                     submitObj.userId);
@@ -320,7 +320,7 @@ module.exports = {
                 }
 
                 let problemArr = json.getJSONDataByField(
-                    path.join(rootDir, "jsons/problem.json"),
+                    path.join(dbDir, "problem.json"),
                     "equal",
                     "id",
                     submitObj.problemId);
@@ -353,100 +353,6 @@ module.exports = {
     },
     judgeProblem:(req, res) => {
         judgeProblem(req, res);
-        // let dataStr = "";
-        // req.on("data", (data) => {
-        //     dataStr += data;
-        // });
-        // req.on("end", () => {
-        //     let dataObj = {};
-        //     try {
-        //         dataObj = JSON.parse(dataStr);
-        //     }
-        //     catch (e) {
-        //         console.log(e);
-        //     }
-        //     console.log(dataObj);
-
-        //     const fileDir = path.join(uploadDir, dataObj.userId + "/");
-        //     const filePath = path.join(fileDir, dataObj.fileName);
-        //     const fileBin = path.join(fileDir, "a.out");
-
-        //     const args =
-        //         "-O2 -Wall -Werror " +
-        //         "-o " + fileBin + " " +
-        //         filePath;
-
-        //     // exec("gcc " + args, (errBuild, stdoutBuild, stderrBuild) => {
-        //     //     console.log("编译标准输出：", stdoutBuild)
-        //     //     if (errBuild) {
-        //     //         // console.log("编译异常错误：", errBuild);
-        //     //         console.log("编译标准错误：", stderrBuild);
-        //     //     }
-        //     //     else {
-        //     //         exec(fileBin, (errExec, stdoutExec, stderrExec) => {
-        //     //             console.log("执行标准输出：", stdoutExec);
-        //     //             if (errExec) {
-        //     //                 // console.log("执行异常错误：", errExec);
-        //     //                 console.log("执行标准错误：", stderrExec);
-        //     //             }
-        //     //         });
-        //     //     }
-        //     // });
-
-        //     const resBuild = spawnSync("gcc", args.split(" "));
-        //     let stdoutBuild = resBuild.stdout.toString();
-        //     let stderrBuild = resBuild.stderr.toString();
-        //     let stdoutExec = "";
-        //     let stderrExec = "";
-        //     console.log("编译标准输出：", stdoutBuild);
-        //     console.log("编译错误输出：", stderrBuild);
-        //     if (stderrBuild === "") {
-        //         const resExec = spawnSync(fileBin);
-        //         stdoutExec = resExec.stdout.toString();
-        //         stderrExec = resExec.stderr.toString();
-        //         console.log("执行标准输出：", stdoutExec);
-        //         console.log("执行错误输出：", stderrExec);
-        //     }
-
-        //     let problemTestcase = "";
-        //     const problemArr = json.getJSONDataByField(
-        //         path.join(rootDir, "jsons/problem.json"),
-        //         "equal",
-        //         "id",
-        //         dataObj.problemId);
-        //     if (problemArr.length > 0) {
-        //         const problemObj = problemArr[0];
-        //         problemTestcase = problemObj.problemTestcase;
-        //     }
-        //     console.log("测试用例输出：", problemTestcase);
-        //     let submitStatus = "未通过";
-        //     let submitInfo = "";
-        //     if (stderrBuild === "" &&
-        //         stdoutExec === problemTestcase) {
-        //         submitStatus = "已通过";
-        //     }
-        //     console.log("判题状态输出：", submitStatus);
-        //     console.log();
-
-        //     if (stderrBuild !== "") {
-        //         submitInfo = stderrBuild;
-        //     }
-        //     else if (stderrExec !== "") {
-        //         submitInfo = stderrExec;
-        //     }
-
-        //     json.addJSONDataToBack(
-        //         path.join(rootDir, "jsons/submit.json"), {
-        //             id: uuidv4(),
-        //             userId: dataObj.userId,
-        //             problemId: dataObj.problemId,
-        //             submitStatus: submitStatus,
-        //             submitDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-        //             submitInfo: submitInfo
-        //         });
-
-        //     res.end("success");
-        // });
     },
     uploadFile: (req, res) => {
         uploadFile(req, res, "online", 50);
@@ -501,7 +407,7 @@ module.exports = {
             logLoginWriteStream.write("用户账号：" + dataObj.userAccount + "\n");
 
             let userArr = json.getJSONDataByField(
-                path.join(rootDir, "jsons/user.json"),
+                path.join(dbDir, "user.json"),
                 "equal",
                 "userAccount",
                 dataObj.userAccount);
