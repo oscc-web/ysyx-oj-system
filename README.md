@@ -3,7 +3,7 @@
 </p>
 
 <h1>
-    <p align="center">一生一芯在线评测系统</p>
+    <p align="center">一生一芯计划在线评测系统</p>
 </h1>
 
 ![screenshot](./docs/screenshot.png)
@@ -30,11 +30,11 @@
     </a>
 </p>
 
-<p align="center">🇨🇳 中文简体  |  <a title="English" href="README.md">🇬🇧 English</a></p>
+<p align="center">中文简体 | <a title="English" href="README.md"> English</a></p>
 
 <p align="center">
     <span>预览：</span>
-    <a target="_blank" href="http://39.101.140.145:10140>一生一芯在线评测系统网站</a>
+    <a target="_blank" href="http://39.101.140.145:10140">一生一芯在线评测系统网站</a>
 </p>
 
 ## 特性
