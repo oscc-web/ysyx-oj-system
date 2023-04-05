@@ -2,6 +2,7 @@
     "name": "ysyx-oj-system",
     "version": "1.0.0",
     "scripts": {
+        "init": "bash ./init.sh",
         "serve": "node ./srcs/backend/app.js"
     },
     "dependencies": {

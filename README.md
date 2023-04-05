@@ -66,14 +66,15 @@ $> git clone git@github.com:myyerrol/ysyx-oj-system.git
 $> npm install
 ```
 
-### 配置端口
+### 配置系统
 
-根据本地开发机或远程服务器的端口占用情况，酌情修改`config/config.js`文件中`port`属性，确保与已启动服务端口不冲突即可，默认值是`5050`。
+根据本地开发机或远程服务器的端口占用情况，酌情修改`config/config.js`文件中`port`属性，确保与已启动服务端口不冲突即可。
 
 ### 运行系统
 
 ```sh
-$> npm run serve
+$> npm run init  # 初始化系统
+$> npm run serve # 运行服务器
 ```
 
 ### 更新源码
