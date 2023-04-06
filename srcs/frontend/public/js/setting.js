@@ -2,33 +2,32 @@ layui.use(["admin", "form"], function() {
     var $     = layui.jquery;
     var admin = layui.admin;
 
-    function doChangeTheme(theme) {
+    $(document).ready(function() {
+        doChangeTheme("init", layui.data(admin.tableName).theme);
+    });
+
+    function doChangeTheme(type, theme) {
         $(".btnTheme").removeClass("active");
         if (theme) {
             $(".btnTheme[theme=" + theme + "]").addClass("active");
+            if (type === "init") {
+                return;
+            }
+            layui.data(admin.tableName, {
+                key: "theme",
+                value: theme
+            });
         }
-        else {
-            $(".btnTheme").eq(0).addClass("active");
-            theme = $(".btnTheme").eq(0).attr("theme");
-        }
-        layui.data(admin.tableName, {
-            key: "theme",
-            value: theme
-        });
-
         try {
-            top.layui.admin.changeTheme(
-                theme ? getThemeDir() + theme + ".css" : theme);
+            top.layui.admin.changeTheme(getThemeDir() + theme + ".css");
         }
         catch (e) {
             console.warn(e);
         }
     }
 
-    doChangeTheme(layui.data(admin.tableName).theme);
-
     $(".btnTheme").click(function() {
         var theme = $(this).attr("theme");
-        doChangeTheme(theme);
+        doChangeTheme("switch", theme);
     });
 });
