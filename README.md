@@ -73,8 +73,8 @@ $> npm install
 ### 运行系统
 
 ```sh
-$> npm run init  # 初始化系统
-$> npm run serve # 运行服务器
+$> npm run init      # 初始化系统
+$> npm run serve-dev # 运行服务器
 ```
 
 ### 更新源码

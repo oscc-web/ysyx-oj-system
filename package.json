@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "scripts": {
         "init": "bash ./init.sh",
-        "serve": "node ./srcs/backend/app.js"
+        "serve-dev": "node ./srcs/backend/app.js",
+        "serve-pro-start": "pm2 start ./srcs/backend/app.js",
+        "serve-pro-stop": "pm2 stop app"
     },
     "dependencies": {
         "dayjs": "^1.11.7",
