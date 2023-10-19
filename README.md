@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="Logo" src="./srcs/frontend/public/img/logo.png" width="150">
+    <img alt="Logo" src="https://github.com/oscc-web/ysyx-website-resources/blob/main/images/logo/logo.png" width="200">
 </p>
 
 <h1>
@@ -15,18 +15,18 @@
     <a title="Node Version" target="_blank" href="https://nodejs.org">
         <img alt="Node Version" src="https://img.shields.io/badge/Node-%3E%3D16.19.1-blue" />
     </a>
-    <a title="License" target="_blank" href="https://github.com/oscc-ysyx-web-project/ysyx-oj-system/blob/master/LICENSE">
-        <img alt="License" src="https://img.shields.io/github/license/oscc-ysyx-web-project/ysyx-oj-system.svg" />
+    <a title="License" target="_blank" href="https://github.com/oscc-web/ysyx-oj-system/blob/master/LICENSE">
+        <img alt="License" src="https://img.shields.io/github/license/oscc-web/ysyx-oj-system.svg" />
     </a>
     <br/>
-    <a title="GitHub Watchers" target="_blank" href="https://github.com/oscc-ysyx-web-project/ysyx-oj-system/watchers">
-        <img alt="GitHub Watchers" src="https://img.shields.io/github/watchers/oscc-ysyx-web-project/ysyx-oj-system.svg?label=Watchers&style=social" />
+    <a title="GitHub Watchers" target="_blank" href="https://github.com/oscc-web/ysyx-oj-system/watchers">
+        <img alt="GitHub Watchers" src="https://img.shields.io/github/watchers/oscc-web/ysyx-oj-system.svg?label=Watchers&style=social" />
     </a>
-    <a title="GitHub Stars" target="_blank" href="https://github.com/oscc-ysyx-web-project/ysyx-oj-system/stargazers">
-        <img alt="GitHub Stars" src="https://img.shields.io/github/stars/oscc-ysyx-web-project/ysyx-oj-system.svg?label=Stars&style=social" />
+    <a title="GitHub Stars" target="_blank" href="https://github.com/oscc-web/ysyx-oj-system/stargazers">
+        <img alt="GitHub Stars" src="https://img.shields.io/github/stars/oscc-web/ysyx-oj-system.svg?label=Stars&style=social" />
     </a>
-    <a title="GitHub Forks" target="_blank" href="https://github.com/oscc-ysyx-web-project/ysyx-oj-system/network/members">
-        <img alt="GitHub Forks" src="https://img.shields.io/github/forks/oscc-ysyx-web-project/ysyx-oj-system.svg?label=Forks&style=social" />
+    <a title="GitHub Forks" target="_blank" href="https://github.com/oscc-web/ysyx-oj-system/network/members">
+        <img alt="GitHub Forks" src="https://img.shields.io/github/forks/oscc-web/ysyx-oj-system.svg?label=Forks&style=social" />
     </a>
 </p>
 
@@ -57,7 +57,7 @@
 
 ```sh
 $> cd your-workspaces
-$> git clone git@github.com:oscc-ysyx-web-project/ysyx-oj-system.git
+$> git clone git@github.com:oscc-web/ysyx-oj-system.git
 ```
 
 ### 安装依赖
@@ -87,7 +87,7 @@ $> git pull
 ## 反馈
 
 - 在本项目的GitHub Issues上提交错误或优化建议。
-- 可以给我的电子[邮箱](mailto:oscc-ysyx-web-project@126.com)发送你对本项目未来发展的想法或建议。
+- 可以给我的电子[邮箱](mailto:oscc-web@126.com)发送你对本项目未来发展的想法或建议。
 
 ## 贡献
 
