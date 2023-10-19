@@ -53,7 +53,7 @@
 
 ## 使用
 
-### 下载源码
+### 下载仓库
 
 ```sh
 $> cd your-workspaces
@@ -77,7 +77,7 @@ $> npm run init      # 初始化系统
 $> npm run serve-dev # 运行服务器
 ```
 
-### 更新源码
+### 更新仓库
 
 ```sh
 $> cd your-workspaces/ysyx-oj-system
